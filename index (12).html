@@ -1,0 +1,2440 @@
+<!DOCTYPE html>
+<!--
+  MST Community — Staff Application v2
+  Licencia MST Community · ver pie de página
+  discord.gg/mst-community-1257189867020881962
+  Creador: niourozi · discord.com/users/1210282337850630217
+-->
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>MST Community — Staff Application</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Barlow:wght@300;400;500;600;700;800&family=Barlow+Condensed:wght@600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Monaco Editor CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs/loader.js"></script>
+
+  <!-- Gibberish Detector — github.com/gtomitsuka/gibberish-detector.js (MIT) -->
+  <script src="https://gtomitsuka.github.io/gibberish-detector.js/gibberish.min.js"
+          onerror="console.warn('[Gibberish] CDN no disponible, usando heurísticas locales')"></script>
+
+  <style>
+    :root {
+      --bg:           #05070b;
+      --surface:      #090c12;
+      --card:         #0e1219;
+      --card2:        #141921;
+      --border:       #1a2030;
+      --border2:      #242d3f;
+      --orange:       #e8721a;
+      --orange-dim:   rgba(232,114,26,0.10);
+      --orange-glow:  rgba(232,114,26,0.28);
+      --orange2:      #f58b35;
+      --blue:         #4fa3e8;
+      --blue-dim:     rgba(79,163,232,0.09);
+      --green:        #3fb950;
+      --green-dim:    rgba(63,185,80,0.09);
+      --red:          #f85149;
+      --red-dim:      rgba(248,81,73,0.09);
+      --amber:        #e3b341;
+      --gold:         #c9922a;
+      --text:         #dde5f0;
+      --text-2:       #7e8fa8;
+      --text-3:       #3d4a5e;
+      --mono:         'JetBrains Mono', monospace;
+      --body:         'Barlow', sans-serif;
+      --display:      'Barlow Condensed', sans-serif;
+      --radius:       8px;
+      --radius-sm:    5px;
+      --transition:   0.2s cubic-bezier(0.4,0,0.2,1);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--body);
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    body::before {
+      content: ''; position: fixed; inset: 0; z-index: 0;
+      background-image:
+        linear-gradient(rgba(232,114,26,0.018) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(232,114,26,0.018) 1px, transparent 1px);
+      background-size: 48px 48px;
+      pointer-events: none;
+    }
+    body::after {
+      content: ''; position: fixed; inset: 0; z-index: 0;
+      background:
+        radial-gradient(ellipse 80% 55% at 50% -5%, rgba(232,114,26,0.06) 0%, transparent 55%),
+        radial-gradient(ellipse 50% 60% at 90% 100%, rgba(79,163,232,0.04) 0%, transparent 55%),
+        radial-gradient(ellipse 60% 40% at 0% 70%, rgba(201,146,42,0.03) 0%, transparent 50%);
+      pointer-events: none;
+    }
+
+    .scanlines {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background: repeating-linear-gradient(
+        0deg, transparent, transparent 2px,
+        rgba(0,0,0,0.035) 2px, rgba(0,0,0,0.035) 4px
+      );
+    }
+
+    /* ── TOPBAR ── */
+    .topbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      height: 54px;
+      background: rgba(5,7,11,0.88);
+      backdrop-filter: blur(16px) saturate(1.3);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; padding: 0 1.5rem; gap: 1rem;
+    }
+    .topbar::after {
+      content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--orange-glow), transparent);
+    }
+    .topbar-logo {
+      display: flex; align-items: center; gap: .75rem;
+      font-family: var(--display); font-size: .9rem; font-weight: 800;
+      color: var(--text); letter-spacing: .14em; text-transform: uppercase;
+    }
+    .logo-badge {
+      width: 32px; height: 32px; border-radius: 7px;
+      background: linear-gradient(135deg, var(--orange), #b85a12);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--display); font-size: .65rem; font-weight: 800;
+      color: #fff; letter-spacing: .06em;
+      box-shadow: 0 0 12px rgba(232,114,26,0.35);
+    }
+    .topbar-sep { width: 1px; height: 22px; background: var(--border2); margin: 0 .4rem; }
+    .topbar-slug {
+      font-family: var(--mono); font-size: .6rem;
+      color: var(--text-3); letter-spacing: .16em; text-transform: uppercase;
+    }
+
+    /* ── PROGRESS ── */
+    .progress-rail {
+      position: fixed; top: 54px; left: 0; right: 0; z-index: 99;
+      height: 2px; background: var(--border);
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--gold), var(--orange), var(--orange2));
+      transition: width .65s cubic-bezier(0.4,0,0.2,1); width: 0%;
+      box-shadow: 0 0 10px var(--orange-glow);
+    }
+
+    /* ── LAYOUT ── */
+    .wrapper {
+      position: relative; z-index: 1;
+      max-width: 700px; margin: 0 auto;
+      padding: 100px 1.2rem 6rem;
+    }
+
+    /* ── HEADER ── */
+    header { margin-bottom: 2.8rem; }
+
+    .header-eyebrow {
+      display: inline-flex; align-items: center; gap: .55rem;
+      font-family: var(--mono); font-size: .6rem; color: var(--orange);
+      letter-spacing: .2em; text-transform: uppercase;
+      margin-bottom: 1rem; padding: .3rem .8rem;
+      background: var(--orange-dim);
+      border: 1px solid rgba(232,114,26,0.22); border-radius: 30px;
+    }
+    .header-eyebrow .dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--orange);
+      animation: pulseDot 2.2s ease-in-out infinite;
+    }
+    @keyframes pulseDot {
+      0%,100%{opacity:1;transform:scale(1)}
+      50%{opacity:.4;transform:scale(.65)}
+    }
+
+    h1 {
+      font-family: var(--display);
+      font-size: clamp(2rem, 6vw, 2.9rem);
+      font-weight: 800; line-height: 1.08;
+      color: var(--text); margin-bottom: 1rem;
+      letter-spacing: .01em; text-transform: uppercase;
+    }
+    h1 .accent { color: var(--orange); }
+
+    .header-desc {
+      font-size: 1.02rem; color: var(--text-2);
+      line-height: 1.7; max-width: 540px;
+    }
+    .header-desc strong { color: var(--blue); font-weight: 500; }
+
+    /* ── STEP NAV ── */
+    .step-nav { display: flex; align-items: center; margin-bottom: 2.2rem; }
+    .step-item {
+      display: flex; align-items: center; gap: .5rem;
+      font-family: var(--mono); font-size: .58rem;
+      letter-spacing: .12em; color: var(--text-3);
+      text-transform: uppercase; flex: 1; cursor: default;
+      transition: color var(--transition);
+    }
+    .step-item:last-child { flex: 0; }
+    .step-dot {
+      width: 28px; height: 28px; border-radius: 50%;
+      border: 1.5px solid var(--border2);
+      background: var(--surface);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--mono); font-size: .56rem; font-weight: 700;
+      color: var(--text-3); flex-shrink: 0;
+      transition: all var(--transition);
+    }
+    .step-connector {
+      flex: 1; height: 1px; background: var(--border2);
+      transition: background var(--transition);
+    }
+    .step-item.active { color: var(--orange); }
+    .step-item.active .step-dot {
+      border-color: var(--orange); color: var(--orange);
+      background: var(--orange-dim);
+      box-shadow: 0 0 0 4px rgba(232,114,26,0.08);
+    }
+    .step-item.done .step-dot { border-color: var(--orange); background: var(--orange); color: #fff; }
+    .step-item.done + .step-connector { background: var(--orange); }
+    .step-label { display: none; }
+    @media(min-width:520px){ .step-label { display: inline; } }
+
+    /* ── PANELS ── */
+    .step-panel { display: none; opacity: 0; }
+    .step-panel.active { display: block; animation: panelIn .38s cubic-bezier(0.4,0,0.2,1) forwards; }
+    .step-panel.exit   { animation: panelOut .26s cubic-bezier(0.4,0,0.2,1) forwards; }
+    @keyframes panelIn  { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
+    @keyframes panelOut { from{opacity:1;transform:translateY(0)} to{opacity:0;transform:translateY(-14px)} }
+
+    /* ── SECTION LABELS ── */
+    .section-tag {
+      font-family: var(--mono); font-size: .58rem;
+      letter-spacing: .22em; text-transform: uppercase;
+      color: var(--text-3); margin-bottom: .4rem;
+    }
+    .section-title {
+      font-family: var(--display);
+      font-size: 1.55rem; font-weight: 800;
+      color: var(--text); margin-bottom: 1.5rem;
+      letter-spacing: .04em; text-transform: uppercase;
+    }
+    .section-title .accent { color: var(--orange); }
+
+    /* ── NOTICE ── */
+    .notice {
+      display: flex; gap: .8rem; align-items: flex-start;
+      padding: .9rem 1rem; border-radius: var(--radius-sm);
+      font-family: var(--mono); font-size: .6rem;
+      line-height: 1.7; letter-spacing: .04em; margin-bottom: 1.5rem;
+    }
+    .notice-icon { flex-shrink: 0; padding-top: 1px; }
+    .notice-icon svg { width: 14px; height: 14px; }
+    .notice.info { background: var(--blue-dim); border: 1px solid rgba(79,163,232,0.18); color: var(--blue); }
+    .notice.warn { background: rgba(227,179,65,0.07); border: 1px solid rgba(227,179,65,0.2); color: var(--amber); }
+
+    /* ── FIELDS ── */
+    .field-grid { display: grid; gap: 1.1rem; grid-template-columns: 1fr; }
+    .field-grid.two { grid-template-columns: 1fr 1fr; }
+    @media(max-width:500px){ .field-grid.two { grid-template-columns: 1fr; } }
+    .field { display: flex; flex-direction: column; gap: .45rem; }
+
+    .field-label {
+      font-family: var(--mono); font-size: .6rem;
+      letter-spacing: .14em; text-transform: uppercase;
+      color: var(--text-2);
+      display: flex; align-items: center; gap: .4rem;
+    }
+    .field-label .req { color: var(--orange); }
+    .field-label .opt {
+      color: var(--text-3); font-size: .54rem;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border2);
+      padding: .08em .4em; border-radius: 3px; letter-spacing: .08em;
+    }
+
+    input[type="text"],input[type="number"],textarea,select {
+      width: 100%; background: var(--card);
+      border: 1px solid var(--border2);
+      border-radius: var(--radius-sm); color: var(--text);
+      font-family: var(--body); font-size: .97rem; font-weight: 400;
+      padding: .72rem .95rem; outline: none;
+      transition: border-color var(--transition), box-shadow var(--transition);
+      -webkit-appearance: none; line-height: 1.5;
+    }
+    select { cursor: pointer; }
+    select option { background: var(--card2); color: var(--text); }
+    input::placeholder, textarea::placeholder { color: var(--text-3); font-size: .9rem; font-weight: 300; }
+    input:focus, textarea:focus, select:focus {
+      border-color: var(--orange);
+      box-shadow: 0 0 0 3px var(--orange-dim);
+    }
+    input.invalid, textarea.invalid, select.invalid {
+      border-color: var(--red) !important;
+      box-shadow: 0 0 0 3px var(--red-dim) !important;
+    }
+    textarea { resize: vertical; min-height: 120px; }
+    input[type="number"] { -moz-appearance: textfield; }
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; }
+
+    .field-hint {
+      font-family: var(--mono); font-size: .57rem;
+      color: var(--text-3); letter-spacing: .06em; line-height: 1.6;
+    }
+    .field-hint code {
+      color: var(--blue); background: var(--blue-dim);
+      padding: .05em .35em; border-radius: 3px; font-family: var(--mono);
+    }
+    .char-count {
+      font-family: var(--mono); font-size: .55rem;
+      color: var(--text-3); text-align: right;
+      letter-spacing: .08em; transition: color var(--transition);
+    }
+    .char-count.ok { color: var(--green); }
+    .char-count.warn-count { color: var(--amber); }
+
+    .divider { height: 1px; background: var(--border); margin: 1.6rem 0; }
+
+    /* ── OPTION PILLS ── */
+    .option-grid { display: flex; flex-wrap: wrap; gap: .5rem; }
+    .opt-item { position: relative; }
+    .opt-item input { position: absolute; opacity: 0; width: 0; height: 0; }
+    .opt-body {
+      display: flex; align-items: center; gap: .55rem;
+      padding: .6rem 1rem; border-radius: var(--radius-sm);
+      border: 1px solid var(--border2); background: var(--card);
+      font-family: var(--body); font-size: .9rem;
+      color: var(--text-2); cursor: pointer;
+      transition: all var(--transition); user-select: none; white-space: nowrap;
+    }
+    .opt-body:hover { color: var(--text); background: var(--card2); }
+    .opt-item input:checked ~ .opt-body { border-color: var(--orange); background: var(--orange-dim); color: var(--text); }
+    .opt-check {
+      width: 14px; height: 14px; border-radius: 50%;
+      border: 1.5px solid currentColor; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      transition: all var(--transition);
+    }
+    .opt-item input:checked ~ .opt-body .opt-check { border-color: var(--orange); background: var(--orange); }
+    .opt-check::after {
+      content: ''; width: 5px; height: 5px; border-radius: 50%;
+      background: #fff; opacity: 0; transition: opacity var(--transition);
+    }
+    .opt-item input:checked ~ .opt-body .opt-check::after { opacity: 1; }
+
+    /* ── TAG CHECKBOXES ── */
+    .tag-check { position: relative; }
+    .tag-check input { position: absolute; opacity: 0; width: 0; height: 0; }
+    .tag-body {
+      display: inline-flex; align-items: center; gap: .4rem;
+      padding: .38rem .85rem; border-radius: 30px;
+      border: 1px solid var(--border2); background: var(--card);
+      font-family: var(--body); font-size: .88rem;
+      color: var(--text-2); cursor: pointer;
+      transition: all var(--transition); user-select: none;
+    }
+    .tag-body:hover { color: var(--text); border-color: var(--border2); }
+    .tag-check input:checked ~ .tag-body { border-color: var(--orange); background: var(--orange-dim); color: var(--text); }
+
+    /* ── LANGUAGE PICKER ── */
+    .lang-picker { position: relative; }
+    .lang-tags-wrap {
+      min-height: 44px; padding: .38rem .55rem;
+      background: var(--card); border: 1px solid var(--border2);
+      border-radius: var(--radius-sm); cursor: text;
+      display: flex; flex-wrap: wrap; gap: .35rem; align-items: center;
+      transition: border-color var(--transition), box-shadow var(--transition);
+    }
+    .lang-tags-wrap:focus-within {
+      border-color: var(--orange);
+      box-shadow: 0 0 0 3px var(--orange-dim);
+    }
+    .lang-tags-wrap.invalid-lp {
+      border-color: var(--red) !important;
+      box-shadow: 0 0 0 3px var(--red-dim) !important;
+    }
+    .lang-tag {
+      display: inline-flex; align-items: center; gap: .3rem;
+      background: var(--orange-dim); border: 1px solid rgba(232,114,26,0.35);
+      color: var(--text); border-radius: 4px;
+      font-family: var(--body); font-size: .83rem;
+      padding: .18rem .55rem; white-space: nowrap;
+    }
+    .lang-tag-x {
+      background: none; border: none; color: var(--text-2);
+      cursor: pointer; padding: 0 0 0 .15rem; font-size: 1rem; line-height: 1;
+      display: flex; align-items: center; transition: color var(--transition);
+    }
+    .lang-tag-x:hover { color: var(--red); }
+    .lang-search {
+      background: none; border: none; outline: none;
+      color: var(--text); font-family: var(--body); font-size: .92rem;
+      flex: 1; min-width: 130px; padding: .12rem 0;
+    }
+    .lang-search::placeholder { color: var(--text-3); font-size: .86rem; }
+    .lang-dropdown {
+      position: absolute; top: calc(100% + 4px); left: 0; right: 0; z-index: 200;
+      background: var(--card2); border: 1px solid var(--border2);
+      border-radius: var(--radius-sm);
+      max-height: 240px; overflow-y: auto;
+      box-shadow: 0 10px 36px rgba(0,0,0,.55);
+      display: none;
+    }
+    .lang-dropdown.open { display: block; }
+    .lang-dropdown::-webkit-scrollbar { width: 4px; }
+    .lang-dropdown::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+    .lang-opt {
+      padding: .52rem .9rem; cursor: pointer;
+      font-family: var(--body); font-size: .9rem; color: var(--text-2);
+      display: flex; align-items: center; justify-content: space-between;
+      transition: background var(--transition), color var(--transition);
+    }
+    .lang-opt:hover { background: var(--card); color: var(--text); }
+    .lang-opt.sel { color: var(--orange); background: var(--orange-dim); }
+    .lang-opt .lang-tick {
+      width: 14px; height: 14px; border-radius: 50%;
+      background: var(--orange);
+      display: none; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .lang-opt.sel .lang-tick { display: flex; }
+    .lang-tick svg { width: 8px; height: 8px; color: #fff; }
+    .lang-no-res {
+      padding: .7rem .9rem;
+      font-family: var(--mono); font-size: .6rem;
+      color: var(--text-3); letter-spacing: .08em;
+    }
+
+    /* ── LEVEL CARDS ── */
+    .level-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: .75rem; }
+    @media(max-width:500px){ .level-grid { grid-template-columns: 1fr; } }
+    .level-card { position: relative; cursor: pointer; }
+    .level-card input { position: absolute; opacity: 0; width: 0; height: 0; }
+    .level-body {
+      display: flex; flex-direction: column; align-items: center;
+      gap: .5rem; padding: 1rem .75rem;
+      border: 1px solid var(--border2); border-radius: var(--radius);
+      background: var(--card); text-align: center;
+      transition: all var(--transition);
+    }
+    .level-body:hover { border-color: var(--border2); background: var(--card2); }
+    .level-card input:checked ~ .level-body {
+      border-color: var(--orange); background: var(--orange-dim);
+      box-shadow: 0 0 0 3px rgba(232,114,26,0.1);
+    }
+    .level-icon { color: var(--text-3); transition: color var(--transition); }
+    .level-icon svg { width: 22px; height: 22px; }
+    .level-card input:checked ~ .level-body .level-icon { color: var(--orange); }
+    .level-name {
+      font-family: var(--display); font-size: .85rem;
+      font-weight: 800; letter-spacing: .1em; text-transform: uppercase;
+      color: var(--text-2); transition: color var(--transition);
+    }
+    .level-card input:checked ~ .level-body .level-name { color: var(--orange); }
+    .level-desc {
+      font-family: var(--mono); font-size: .56rem;
+      color: var(--text-3); line-height: 1.6; letter-spacing: .04em;
+    }
+    .level-card input:checked ~ .level-body .level-desc { color: var(--text-2); }
+
+    /* ── PLATFORM BLOCKS ── */
+    .platform-block {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); padding: .9rem 1rem; margin-bottom: .65rem;
+    }
+    .platform-title {
+      font-family: var(--mono); font-size: .58rem;
+      letter-spacing: .14em; text-transform: uppercase;
+      display: flex; align-items: center; gap: .5rem;
+      margin-bottom: .65rem;
+    }
+    .platform-title svg { width: 12px; height: 12px; flex-shrink: 0; }
+    .platform-title.pc  { color: var(--blue); }
+    .platform-title.mob { color: var(--green); }
+
+    /* ── CHECKBOX ITEMS ── */
+    .chk-item { cursor: pointer; display: block; }
+    .chk-item input { position: absolute; opacity: 0; width: 0; height: 0; }
+    .chk-body {
+      display: flex; align-items: flex-start; gap: .75rem;
+      padding: .7rem .9rem; border-radius: var(--radius-sm);
+      border: 1px solid var(--border2); background: var(--card);
+      transition: all var(--transition);
+    }
+    .chk-body:hover { border-color: var(--border2); background: var(--card2); }
+    .chk-item input:checked ~ .chk-body { border-color: var(--orange); background: var(--orange-dim); }
+    .chk-square {
+      width: 18px; height: 18px; border-radius: 4px;
+      border: 1.5px solid var(--border2); background: var(--surface);
+      flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+      transition: all var(--transition); margin-top: 1px;
+    }
+    .chk-item input:checked ~ .chk-body .chk-square { border-color: var(--orange); background: var(--orange); }
+    .chk-square svg { opacity: 0; transition: opacity var(--transition); }
+    .chk-item input:checked ~ .chk-body .chk-square svg { opacity: 1; }
+    .chk-text { font-size: .9rem; color: var(--text-2); line-height: 1.6; transition: color var(--transition); }
+    .chk-item input:checked ~ .chk-body .chk-text { color: var(--text); }
+
+    /* ── CODE EDITOR ── */
+    .code-editor-wrap { border: 1px solid var(--border2); border-radius: var(--radius); overflow: hidden; }
+    .code-editor-bar {
+      display: flex; align-items: center; gap: .65rem;
+      background: #1a1a2e; padding: .55rem .8rem;
+      border-bottom: 1px solid #2a2a3e;
+    }
+    .code-editor-dots { display: flex; gap: .35rem; }
+    .code-editor-dots span {
+      width: 10px; height: 10px; border-radius: 50%;
+      display: block;
+    }
+    .d1 { background: #ff5f57; }
+    .d2 { background: #febc2e; }
+    .d3 { background: #28c840; }
+    .code-editor-lang {
+      font-family: var(--mono); font-size: .58rem;
+      color: #6a7891; letter-spacing: .1em; flex: 1;
+    }
+    .code-editor-actions { display: flex; gap: .4rem; }
+    .btn-copy-code {
+      font-family: var(--mono); font-size: .56rem;
+      background: transparent; border: 1px solid #2a2a3e;
+      color: #6a7891; padding: .2rem .55rem;
+      border-radius: 3px; cursor: pointer; transition: var(--transition);
+      display: flex; align-items: center; gap: .35rem; letter-spacing: .06em;
+    }
+    .btn-copy-code svg { width: 11px; height: 11px; }
+    .btn-copy-code:hover { border-color: var(--orange); color: var(--orange); }
+    .btn-export-lua {
+      font-family: var(--mono); font-size: .56rem;
+      background: var(--orange-dim); border: 1px solid rgba(232,114,26,0.35);
+      color: var(--orange); padding: .2rem .6rem;
+      border-radius: 3px; cursor: pointer; transition: var(--transition);
+      display: flex; align-items: center; gap: .35rem; letter-spacing: .06em;
+    }
+    .btn-export-lua svg { width: 11px; height: 11px; }
+    .btn-export-lua:hover { background: rgba(232,114,26,0.2); }
+    #monaco-container { height: 280px; width: 100%; }
+    #lua-editor { display: none; }
+
+    /* ── RULES BOX ── */
+    .rules-box {
+      background: var(--card); border: 1px solid var(--border2);
+      border-radius: var(--radius); padding: 1rem 1.2rem;
+      margin-bottom: 1.2rem; max-height: 280px; overflow-y: auto;
+    }
+    .rules-box::-webkit-scrollbar { width: 4px; }
+    .rules-box::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+    .rule-item {
+      display: flex; gap: .75rem; align-items: flex-start;
+      padding: .6rem 0; border-bottom: 1px solid var(--border);
+      font-size: .87rem; color: var(--text-2); line-height: 1.65;
+    }
+    .rule-item:last-child { border-bottom: none; }
+    .rule-num {
+      font-family: var(--mono); font-size: .58rem;
+      color: var(--orange); background: var(--orange-dim);
+      border: 1px solid rgba(232,114,26,0.2);
+      padding: .2em .5em; border-radius: 3px;
+      white-space: nowrap; margin-top: 2px; flex-shrink: 0;
+    }
+
+    /* ── META STRIP ── */
+    .meta-strip { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: 1.4rem; }
+    .meta-tag {
+      font-family: var(--mono); font-size: .57rem;
+      letter-spacing: .1em; color: var(--text-3);
+      padding: .25rem .6rem; border-radius: 3px;
+      border: 1px solid var(--border); background: var(--surface);
+    }
+    .meta-tag.orange { color: var(--orange); border-color: rgba(232,114,26,.2); background: var(--orange-dim); }
+    .meta-tag.blue   { color: var(--blue);   border-color: rgba(79,163,232,.2);  background: var(--blue-dim); }
+
+    /* ── BUTTONS ── */
+    .btn-row {
+      display: flex; gap: .75rem; justify-content: flex-end;
+      margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--border);
+    }
+    .btn {
+      font-family: var(--display); font-size: .9rem; font-weight: 700;
+      letter-spacing: .08em; text-transform: uppercase;
+      padding: .65rem 1.6rem; border-radius: var(--radius-sm);
+      border: none; cursor: pointer;
+      display: inline-flex; align-items: center; gap: .5rem;
+      transition: all var(--transition);
+    }
+    .btn svg { width: 15px; height: 15px; }
+    .btn-ghost { background: transparent; color: var(--text-2); border: 1px solid var(--border2); }
+    .btn-ghost:hover { color: var(--text); background: var(--card2); }
+    .btn-primary { background: linear-gradient(135deg, var(--orange), #c05f10); color: #fff; box-shadow: 0 2px 12px rgba(232,114,26,.3); }
+    .btn-primary:hover { background: linear-gradient(135deg, var(--orange2), var(--orange)); box-shadow: 0 4px 20px rgba(232,114,26,.4); }
+    .btn-success { background: linear-gradient(135deg, #2ea043, #1d7a34); color: #fff; box-shadow: 0 2px 12px rgba(63,185,80,.25); }
+    .btn-success:hover { box-shadow: 0 4px 20px rgba(63,185,80,.35); }
+    .btn-success:disabled { opacity: .5; cursor: not-allowed; }
+    .spinner {
+      display: none; width: 14px; height: 14px;
+      border: 2px solid rgba(255,255,255,.3); border-top-color: #fff;
+      border-radius: 50%; animation: spin .65s linear infinite;
+    }
+    @keyframes spin { to{transform:rotate(360deg)} }
+    .btn-success.loading .btn-text { display: none; }
+    .btn-success.loading .spinner  { display: inline-block; }
+
+    /* ── DEVELOPER SECTION ── */
+    .dev-header {
+      display: flex; align-items: center; gap: .75rem; margin-bottom: 1.5rem;
+    }
+    .dev-badge {
+      font-family: var(--mono); font-size: .56rem;
+      letter-spacing: .18em; text-transform: uppercase;
+      color: var(--amber); padding: .25rem .65rem;
+      background: rgba(227,179,65,0.07);
+      border: 1px solid rgba(227,179,65,0.22); border-radius: 30px;
+    }
+    .dev-title {
+      font-family: var(--display); font-size: 1rem; font-weight: 800;
+      color: var(--text-2); letter-spacing: .08em; text-transform: uppercase;
+    }
+
+    /* ── SUCCESS ── */
+    #success-screen {
+      display: none; text-align: center; padding: 4rem 1rem;
+      animation: panelIn .5s cubic-bezier(0.4,0,0.2,1) forwards;
+    }
+    .success-icon-wrap {
+      width: 72px; height: 72px; margin: 0 auto 1.5rem;
+      background: var(--green-dim); border: 1px solid rgba(63,185,80,0.3);
+      border-radius: 18px; display: flex; align-items: center; justify-content: center;
+      animation: successPop .5s cubic-bezier(0.34,1.56,0.64,1) forwards;
+    }
+    .success-icon-wrap svg { width: 32px; height: 32px; color: var(--green); }
+    @keyframes successPop { from{transform:scale(.6);opacity:0} to{transform:scale(1);opacity:1} }
+    .success-title {
+      font-family: var(--display); font-size: 2rem; font-weight: 800;
+      color: var(--text); margin-bottom: .6rem;
+      letter-spacing: .06em; text-transform: uppercase;
+    }
+    .success-code { font-family: var(--mono); font-size: .62rem; color: var(--green); letter-spacing: .28em; margin-bottom: 1.2rem; }
+    .success-sub { color: var(--text-2); font-size: .97rem; max-width: 420px; margin: 0 auto 2rem; line-height: 1.7; }
+    .success-link {
+      display: inline-flex; align-items: center; gap: .5rem;
+      color: var(--blue); text-decoration: none;
+      font-family: var(--mono); font-size: .7rem;
+      letter-spacing: .1em; transition: color var(--transition);
+    }
+    .success-link:hover { color: var(--text); }
+    .success-link svg { width: 14px; height: 14px; }
+
+    /* ── TOAST ── */
+    #toast {
+      position: fixed; bottom: 1.5rem; left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: var(--card2); border: 1px solid var(--border2);
+      border-radius: var(--radius-sm); padding: .65rem 1.2rem;
+      font-family: var(--mono); font-size: .6rem;
+      color: var(--red); letter-spacing: .08em;
+      z-index: 1000; transition: transform .3s cubic-bezier(0.4,0,0.2,1);
+      white-space: nowrap; pointer-events: none;
+      box-shadow: 0 8px 32px rgba(0,0,0,.6);
+      display: flex; align-items: center; gap: .5rem;
+    }
+    #toast.show { transform: translateX(-50%) translateY(0); }
+    #toast svg { width: 13px; height: 13px; flex-shrink: 0; }
+
+    /* ── LICENSE ── */
+    .license-box {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 1.1rem 1.3rem; margin-top: 2.5rem;
+    }
+    .license-box h3 {
+      font-family: var(--display); font-size: .78rem; font-weight: 800;
+      letter-spacing: .2em; color: var(--orange); text-transform: uppercase; margin-bottom: .6rem;
+    }
+    .license-box p { font-family: var(--mono); font-size: .57rem; color: var(--text-3); line-height: 1.85; letter-spacing: .04em; }
+    .license-box a { color: var(--blue); text-decoration: none; }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center; margin-top: 1.8rem;
+      font-family: var(--mono); font-size: .57rem;
+      color: var(--text-3); letter-spacing: .14em; line-height: 2.4;
+    }
+    footer a { color: var(--text-3); text-decoration: none; transition: color var(--transition); }
+    footer a:hover { color: var(--orange); }
+
+    /* ── DEVTOOLS ── */
+    #devtools-warn {
+      display: none; position: fixed; inset: 0; z-index: 99999;
+      background: var(--bg); align-items: center; justify-content: center;
+      flex-direction: column; gap: 1rem; text-align: center; font-family: var(--mono);
+    }
+    #devtools-warn.show { display: flex; }
+    #devtools-warn h2 { font-size: 1.3rem; font-family: var(--display); font-weight: 800; color: var(--red); }
+    #devtools-warn p  { font-size: .7rem; color: var(--text-2); max-width: 300px; line-height: 1.7; }
+
+    /* ── ERROR LOG PANEL ── */
+    #mst-errlog::-webkit-scrollbar { width: 3px; }
+    #mst-errlog::-webkit-scrollbar-thumb { background: #1a2030; border-radius: 2px; }
+    #mst-errlog::-webkit-scrollbar-track { background: transparent; }
+
+    @media(max-width:480px){
+      #mst-errlog { width: calc(100vw - 24px); right: 12px; }
+    }
+
+    @media(max-width:480px){
+      .wrapper { padding: 92px .9rem 5rem; }
+      .btn { padding: .6rem 1.2rem; font-size: .82rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="scanlines"></div>
+
+<div id="devtools-warn">
+  <h2>Acceso Restringido</h2>
+  <p>Cerrá las herramientas de desarrollo para continuar con la postulación.</p>
+</div>
+
+<!-- TOPBAR -->
+<header class="topbar">
+  <div class="topbar-logo">
+    <div class="logo-badge">MST</div>
+    <span>MST Community</span>
+  </div>
+  <div class="topbar-sep"></div>
+  <span class="topbar-slug">Staff Application</span>
+</header>
+
+<div class="progress-rail"><div class="progress-fill" id="progress-fill"></div></div>
+
+<div class="wrapper">
+
+  <header style="position:static;">
+    <div class="header-eyebrow">
+      <span class="dot"></span>
+      Postulación de Staff Abierta
+    </div>
+    <h1>Únete al equipo<br><span class="accent">MST Community</span></h1>
+    <p class="header-desc">
+      Buscamos personas activas con experiencia real en <strong>scripts y automatización</strong>
+      para SA-MP PC y Mobile. Leé cada sección con atención antes de continuar.
+    </p>
+  </header>
+
+  <!-- STEP NAV — 5 pasos -->
+  <nav class="step-nav" id="step-nav">
+    <div class="step-item active" data-step="1">
+      <div class="step-dot">01</div>
+      <span class="step-label">Identidad</span>
+    </div>
+    <div class="step-connector" data-conn="1"></div>
+    <div class="step-item" data-step="2">
+      <div class="step-dot">02</div>
+      <span class="step-label">Técnico</span>
+    </div>
+    <div class="step-connector" data-conn="2"></div>
+    <div class="step-item" data-step="3">
+      <div class="step-dot">03</div>
+      <span class="step-label">Casos</span>
+    </div>
+    <div class="step-connector" data-conn="3"></div>
+    <div class="step-item" data-step="4">
+      <div class="step-dot">04</div>
+      <span class="step-label">Dev</span>
+    </div>
+    <div class="step-connector" data-conn="4"></div>
+    <div class="step-item" data-step="5">
+      <div class="step-dot">05</div>
+      <span class="step-label">Final</span>
+    </div>
+  </nav>
+
+  <!-- ═══════════════════════════════
+       STEP 1 — IDENTIDAD
+  ═══════════════════════════════ -->
+  <div class="step-panel active" id="panel-1">
+    <div class="section-tag">Paso 01 / 05</div>
+    <h2 class="section-title">Tu <span class="accent">Identidad</span></h2>
+
+    <div class="notice info">
+      <div class="notice-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      </div>
+      <span>Tus datos son solo para identificarte durante el proceso. No serán compartidos públicamente.</span>
+    </div>
+
+    <div class="field-grid two" style="margin-bottom:1.1rem;">
+      <div class="field">
+        <label class="field-label" for="nombre">Nombre completo <span class="req">*</span></label>
+        <input type="text" id="nombre" placeholder="Ej: Juan Rodríguez" autocomplete="off">
+      </div>
+      <div class="field">
+        <label class="field-label" for="edad">Edad <span class="req">*</span></label>
+        <input type="number" id="edad" placeholder="16" min="13" max="80">
+      </div>
+    </div>
+
+    <div class="field-grid two" style="margin-bottom:1.1rem;">
+      <div class="field">
+        <label class="field-label">País <span class="req">*</span></label>
+        <div class="lang-picker" id="pais-picker">
+          <div class="lang-tags-wrap" id="pais-tags-wrap" onclick="document.getElementById('pais-search').focus()">
+            <input type="text" class="lang-search" id="pais-search" placeholder="Buscar país..." autocomplete="off" spellcheck="false">
+          </div>
+          <div class="lang-dropdown" id="pais-dropdown"></div>
+        </div>
+        <input type="hidden" id="pais">
+      </div>
+      <div class="field">
+        <label class="field-label" for="genero">Género <span class="req">*</span></label>
+        <select id="genero">
+          <option value="">Seleccioná...</option>
+          <option value="Hombre">Hombre</option>
+          <option value="Mujer">Mujer</option>
+          <option value="Prefiero no decir">Prefiero no decir</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- DISCORD -->
+    <div class="field-grid" style="margin-bottom:1.1rem;">
+      <div class="field">
+        <label class="field-label" for="discord">Discord — usuario o ID <span class="req">*</span></label>
+        <input type="text" id="discord" placeholder="tunombreusuario  o  123456789012345678" autocomplete="off">
+        <p class="field-hint">Podés usar tu username actual o tu ID numérico de Discord.</p>
+      </div>
+    </div>
+
+    <!-- IDIOMAS -->
+    <div class="field-grid" style="margin-bottom:1.1rem;">
+      <div class="field">
+        <label class="field-label">Idiomas que hablás <span class="req">*</span></label>
+        <div class="lang-picker" id="lang-picker">
+          <div class="lang-tags-wrap" id="lang-tags-wrap" onclick="document.getElementById('lang-search').focus()">
+            <input type="text" class="lang-search" id="lang-search" placeholder="Buscar idioma..." autocomplete="off" spellcheck="false">
+          </div>
+          <div class="lang-dropdown" id="lang-dropdown"></div>
+        </div>
+        <p class="field-hint" style="margin-top:.4rem;">Podés seleccionar varios idiomas.</p>
+      </div>
+    </div>
+
+    <!-- DISPOSITIVO -->
+    <div class="field-grid" style="margin-bottom:1.1rem;">
+      <div class="field">
+        <label class="field-label">Plataforma que usás <span class="req">*</span></label>
+        <div class="option-grid">
+          <label class="opt-item"><input type="radio" name="dispositivo" value="PC"><div class="opt-body"><span class="opt-check"></span>PC</div></label>
+          <label class="opt-item"><input type="radio" name="dispositivo" value="Mobile (Android)"><div class="opt-body"><span class="opt-check"></span>Mobile</div></label>
+          <label class="opt-item"><input type="radio" name="dispositivo" value="PC + Mobile"><div class="opt-body"><span class="opt-check"></span>PC + Mobile</div></label>
+        </div>
+      </div>
+    </div>
+
+    <!-- NORMAS -->
+    <div class="field-grid">
+      <div class="field">
+        <label class="field-label">¿Conocés las normas del servidor? <span class="req">*</span></label>
+        <div class="option-grid">
+          <label class="opt-item"><input type="radio" name="normas" value="Sí"><div class="opt-body"><span class="opt-check"></span>Sí</div></label>
+          <label class="opt-item"><input type="radio" name="normas" value="No"><div class="opt-body"><span class="opt-check"></span>No</div></label>
+          <label class="opt-item"><input type="radio" name="normas" value="Las estoy aprendiendo"><div class="opt-body"><span class="opt-check"></span>Aprendiendo</div></label>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- DISPONIBILIDAD -->
+    <div class="field-grid" style="margin-bottom:1.1rem;">
+      <div class="field">
+        <label class="field-label">¿Cuántas horas por semana podés dedicarle al servidor? <span class="req">*</span></label>
+        <div class="option-grid">
+          <label class="opt-item"><input type="radio" name="disponibilidad" value="Menos de 5hs"><div class="opt-body"><span class="opt-check"></span>Menos de 5hs</div></label>
+          <label class="opt-item"><input type="radio" name="disponibilidad" value="5 a 10hs"><div class="opt-body"><span class="opt-check"></span>5 a 10hs</div></label>
+          <label class="opt-item"><input type="radio" name="disponibilidad" value="10 a 20hs"><div class="opt-body"><span class="opt-check"></span>10 a 20hs</div></label>
+          <label class="opt-item"><input type="radio" name="disponibilidad" value="Más de 20hs"><div class="opt-body"><span class="opt-check"></span>Más de 20hs</div></label>
+        </div>
+      </div>
+    </div>
+
+    <!-- HISTORIAL -->
+    <div class="field-grid" style="margin-bottom:1.1rem;">
+      <div class="field">
+        <label class="field-label">¿Alguna vez fuiste baneado o sancionado en MST Community u otro servidor de SA-MP? <span class="req">*</span></label>
+        <div class="option-grid">
+          <label class="opt-item"><input type="radio" name="baneado" value="Nunca"><div class="opt-body"><span class="opt-check"></span>Nunca</div></label>
+          <label class="opt-item"><input type="radio" name="baneado" value="Sí, pero fue hace tiempo y ya fue resuelto"><div class="opt-body"><span class="opt-check"></span>Sí, resuelto</div></label>
+          <label class="opt-item"><input type="radio" name="baneado" value="Sí, actualmente"><div class="opt-body"><span class="opt-check"></span>Sí, actualmente</div></label>
+        </div>
+        <p class="field-hint" style="margin-top:.4rem;">La honestidad suma. Ocultar información puede derivar en descalificación inmediata si se descubre.</p>
+      </div>
+    </div>
+
+    <!-- ACTIVIDAD EN EL SERVIDOR -->
+    <div class="field-grid" style="margin-bottom:1.1rem;">
+      <div class="field">
+        <label class="field-label">¿Hace cuánto tiempo sos miembro activo del servidor de Discord? <span class="req">*</span></label>
+        <div class="option-grid">
+          <label class="opt-item"><input type="radio" name="antiguedad" value="Menos de 1 mes"><div class="opt-body"><span class="opt-check"></span>Menos de 1 mes</div></label>
+          <label class="opt-item"><input type="radio" name="antiguedad" value="1 a 3 meses"><div class="opt-body"><span class="opt-check"></span>1-3 meses</div></label>
+          <label class="opt-item"><input type="radio" name="antiguedad" value="3 a 6 meses"><div class="opt-body"><span class="opt-check"></span>3-6 meses</div></label>
+          <label class="opt-item"><input type="radio" name="antiguedad" value="Más de 6 meses"><div class="opt-body"><span class="opt-check"></span>+6 meses</div></label>
+        </div>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="nextStep(1)">
+        Continuar
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════
+       STEP 2 — TÉCNICO
+  ═══════════════════════════════ -->
+  <div class="step-panel" id="panel-2">
+    <div class="section-tag">Paso 02 / 05</div>
+    <h2 class="section-title">Perfil <span class="accent">Técnico</span></h2>
+
+    <div class="notice warn">
+      <div class="notice-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      </div>
+      <span>MST Community se enfoca en scripts y automatización SA-MP. Si tu experiencia es solo en skins o mapas, este rol probablemente no es para vos.</span>
+    </div>
+
+    <!-- SCRIPTS — requerido -->
+    <div class="field" style="margin-bottom:1.4rem;">
+      <label class="field-label">
+        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+        Scripts en los que tenés experiencia <span class="req">*</span>
+      </label>
+      <p class="field-hint" style="margin-bottom:.65rem;">Marcá solo los que hayas usado realmente.</p>
+
+      <div class="platform-block">
+        <div class="platform-title pc">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          PC — SA-MP
+        </div>
+        <div class="option-grid" style="gap:.45rem;">
+          <label class="tag-check opt-item"><input type="checkbox" name="scripts-pc" value="Cleo"><div class="tag-body">Cleo</div></label>
+          <label class="tag-check opt-item"><input type="checkbox" name="scripts-pc" value="Lua (MoonLoader)"><div class="tag-body">Lua</div></label>
+          <label class="tag-check opt-item"><input type="checkbox" name="scripts-pc" value="ASI"><div class="tag-body">ASI</div></label>
+          <label class="tag-check opt-item"><input type="checkbox" name="scripts-pc" value="SampFuncs (SF)"><div class="tag-body">SF</div></label>
+        </div>
+      </div>
+
+      <div class="platform-block">
+        <div class="platform-title mob">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+          Mobile — SA-MP Android
+        </div>
+        <div class="option-grid" style="gap:.45rem;">
+          <label class="tag-check opt-item"><input type="checkbox" name="scripts-mobile" value="Cleo Android"><div class="tag-body">Cleo</div></label>
+          <label class="tag-check opt-item"><input type="checkbox" name="scripts-mobile" value="Lua (MonetLoader/AML)"><div class="tag-body">Lua</div></label>
+          <label class="tag-check opt-item"><input type="checkbox" name="scripts-mobile" value="Plugins Android"><div class="tag-body">Plugins</div></label>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- APORTE A LA COMUNIDAD -->
+    <div class="field" style="margin-bottom:1.3rem;">
+      <label class="field-label" for="aporte-comunidad">¿De qué forma concreta pensás aportar al servidor siendo parte del staff? <span class="req">*</span></label>
+      <textarea id="aporte-comunidad" style="min-height:100px;" placeholder="Ej: respondiendo dudas técnicas en los canales de ayuda, testeando scripts antes de publicarlos, ayudando a nuevos miembros con la instalación..."></textarea>
+      <div class="char-count" id="cc-aporte">0 / 60 mín.</div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ¿PROGRAMÁS SCRIPTS PROPIOS? -->
+    <div class="field">
+      <label class="field-label">¿Programás scripts propios? <span class="opt">OPCIONAL</span></label>
+      <p class="field-hint" style="margin-bottom:.65rem;">Marcá en qué plataforma desarrollás. Si solo usás scripts de otros, marcá la última opción.</p>
+      <div class="option-grid">
+        <label class="opt-item"><input type="radio" name="prog-plat" value="Programo para PC"><div class="opt-body"><span class="opt-check"></span>Solo PC</div></label>
+        <label class="opt-item"><input type="radio" name="prog-plat" value="Programo para Mobile"><div class="opt-body"><span class="opt-check"></span>Solo Mobile</div></label>
+        <label class="opt-item"><input type="radio" name="prog-plat" value="Programo para PC y Mobile"><div class="opt-body"><span class="opt-check"></span>PC + Mobile</div></label>
+        <label class="opt-item"><input type="radio" name="prog-plat" value="No programo, uso scripts de otros"><div class="opt-body"><span class="opt-check"></span>No programo</div></label>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-ghost" onclick="prevStep(2)">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+        Atrás
+      </button>
+      <button class="btn btn-primary" onclick="nextStep(2)">
+        Continuar
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════
+       STEP 3 — CASOS TÉCNICOS
+  ═══════════════════════════════ -->
+  <div class="step-panel" id="panel-3">
+    <div class="section-tag">Paso 03 / 05</div>
+    <h2 class="section-title">Casos <span class="accent">Técnicos</span></h2>
+
+    <div class="meta-strip">
+      <span class="meta-tag orange">Requerido</span>
+      <span class="meta-tag blue">PC + Mobile</span>
+      <span class="meta-tag">MoonLoader / MonetLoader</span>
+    </div>
+
+    <!-- INSTALAR LUA PC -->
+    <div class="field" style="margin-bottom:1.3rem;">
+      <label class="field-label" for="install-lua-pc">¿Cómo se instala un script Lua en PC con MoonLoader? Explicá paso a paso. <span class="req">*</span></label>
+      <textarea id="install-lua-pc" style="min-height:130px;" placeholder="1. Descargá MoonLoader y sus librerías requeridas desde el sitio oficial...&#10;2. Copiá todos los archivos a la carpeta raíz del juego...&#10;3. Colocá el script .lua en la carpeta /moonloader/...&#10;4. Verificá que todos los archivos necesarios estén presentes para que funcione..."></textarea>
+      <div class="char-count" id="cc-lua-pc">0 / 60 mín.</div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- INSTALAR LUA MOBILE -->
+    <div class="field" style="margin-bottom:1.3rem;">
+      <label class="field-label" for="install-lua-mobile">¿Cómo se instala un script Lua en Mobile (MonetLoader)? Rutas y pasos. <span class="req">*</span></label>
+      <textarea id="install-lua-mobile" style="min-height:130px;" placeholder="1. Activá la opción MonetLoader Scripts desde la configuración del iniciador SA-MP...&#10;2. Descargá y extraé las librerías necesarias (lib.rar)...&#10;3. Pegá la carpeta lib en /storage/emulated/0/.../monetloader/...&#10;4. Colocá el script .lua en la carpeta monetloader...&#10;5. Entrá a cualquier servidor y verificá que el script cargue..."></textarea>
+      <div class="char-count" id="cc-lua-mob">0 / 60 mín.</div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- CASO PC -->
+    <div class="field" style="margin-bottom:1.3rem;">
+      <label class="field-label" for="caso-pc">
+        Caso PC: un usuario puso sus scripts en <code style="color:var(--blue);background:var(--blue-dim);padding:.05em .3em;border-radius:3px;font-family:var(--mono);">/moonloader/</code> pero no cargan. ¿Cómo lo ayudás? <span class="req">*</span>
+      </label>
+      <textarea id="caso-pc" style="min-height:120px;" placeholder="1. Primero reviso moonloader.log para ver el error específico...&#10;2. Verifico si tiene los archivos necesarios para que funcione...&#10;3. Compruebo posibles conflictos con otros mods o plugins..."></textarea>
+      <div class="char-count" id="cc-pc">0 / 60 mín.</div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- CASO MOBILE (NUEVO) -->
+    <div class="field" style="margin-bottom:1.3rem;">
+      <label class="field-label" for="caso-mobile">
+        Caso Mobile: un usuario instaló sus scripts en MonetLoader pero no aparecen en el juego. ¿Cómo lo ayudás? <span class="req">*</span>
+      </label>
+      <textarea id="caso-mobile" style="min-height:120px;" placeholder="1. Verifico que tenga MonetLoader correctamente configurado en el launcher...&#10;2. Reviso que la carpeta lib esté en la ruta correcta...&#10;3. Compruebo que el script esté en /monetloader/ y no en una subcarpeta...&#10;4. Pregunto si el juego está actualizado y si MonetLoader es compatible con esa versión..."></textarea>
+      <div class="char-count" id="cc-mob-case">0 / 60 mín.</div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- CASO CONFLICT -->
+    <div class="field" style="margin-bottom:1.3rem;">
+      <label class="field-label" for="caso-conflicto">
+        Caso general: un usuario se queja agresivamente en el canal de ayuda porque nadie le responde. ¿Cómo manejás la situación? <span class="req">*</span>
+      </label>
+      <textarea id="caso-conflicto" style="min-height:110px;" placeholder="Ej: primero me acerco con calma y le aviso que lo estoy leyendo, le explico que el canal funciona mejor con paciencia..."></textarea>
+      <div class="char-count" id="cc-conflicto">0 / 60 mín.</div>
+      <p class="field-hint" style="margin-top:.4rem;">Evaluamos tanto el conocimiento técnico como la capacidad de tratar bien a los miembros.</p>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-ghost" onclick="prevStep(3)">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+        Atrás
+      </button>
+      <button class="btn btn-primary" onclick="nextStep(3)">
+        Continuar
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════
+       STEP 4 — DEVELOPERS
+  ═══════════════════════════════ -->
+  <div class="step-panel" id="panel-4">
+    <div class="section-tag">Paso 04 / 05</div>
+    <h2 class="section-title">Para <span class="accent">Developers</span></h2>
+
+    <!-- NIVEL TÉCNICO — requerido aquí -->
+    <div class="field" style="margin-bottom:1.8rem;">
+      <label class="field-label">Tu nivel técnico <span class="req">*</span></label>
+      <div class="level-grid">
+        <label class="level-card">
+          <input type="radio" name="nivel" value="Básico — usa scripts de otros como base">
+          <div class="level-body">
+            <div class="level-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+            </div>
+            <span class="level-name">Básico</span>
+            <span class="level-desc">Uso scripts de otros como base. Puedo instalarlos siguiendo instrucciones.</span>
+          </div>
+        </label>
+        <label class="level-card">
+          <input type="radio" name="nivel" value="Intermedio — instala y configura sin ayuda">
+          <div class="level-body">
+            <div class="level-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+            </div>
+            <span class="level-name">Intermedio</span>
+            <span class="level-desc">Instalo y configuro MoonLoader/MonetLoader sin ayuda. Entiendo Cleo, Lua y ASI.</span>
+          </div>
+        </label>
+        <label class="level-card">
+          <input type="radio" name="nivel" value="Developer — hace todo desde cero, scripts propios">
+          <div class="level-body">
+            <div class="level-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M4.93 4.93a10 10 0 0 0 0 14.14"/><path d="M8.46 8.46a5 5 0 0 0 0 7.07"/></svg>
+            </div>
+            <span class="level-name">Developer</span>
+            <span class="level-desc">Hago todo desde cero. Escribo mis propios scripts sin necesitar guía.</span>
+          </div>
+        </label>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- EDITOR DE CÓDIGO LUA -->
+    <div class="field" style="margin-bottom:1.5rem;">
+      <label class="field-label">
+        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+        Editor de código Lua <span class="opt">OPCIONAL · demostrá lo que sabés</span>
+      </label>
+      <p class="field-hint" style="margin-bottom:.7rem;">
+        Editor Monaco (mismo motor que VS Code). Modificá el ejemplo o escribí tu propio script.
+        Se enviará como <code>codigo.lua</code> adjunto al Discord del staff.
+      </p>
+      <div class="code-editor-wrap">
+        <div class="code-editor-bar">
+          <div class="code-editor-dots">
+            <span class="d1"></span><span class="d2"></span><span class="d3"></span>
+          </div>
+          <span class="code-editor-lang">Lua · MoonLoader / SA-MP</span>
+          <div class="code-editor-actions">
+            <button class="btn-copy-code" onclick="copyCode()">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              Copiar
+            </button>
+            <button class="btn-export-lua" onclick="exportLua()">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              codigo.lua
+            </button>
+          </div>
+        </div>
+        <div id="monaco-container"></div>
+      </div>
+      <textarea id="lua-editor" spellcheck="false"></textarea>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- SECCIÓN OPCIONAL PARA EXPERIMENTADOS -->
+    <div class="dev-header">
+      <span class="dev-badge">Todo Opcional</span>
+      <span class="dev-title">Preguntas para Experimentados</span>
+    </div>
+
+    <div class="notice info">
+      <div class="notice-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      </div>
+      <span>Si sos desarrollador o tenés experiencia avanzada, respondé lo que puedas. Si no, podés pasar directamente.</span>
+    </div>
+
+    <!-- BLASTHACK -->
+    <div class="field" style="margin-bottom:1.2rem;">
+      <label class="field-label" for="blasthack">¿Qué es BlastHack? Explicá brevemente. <span class="opt">OPCIONAL</span></label>
+      <textarea id="blasthack" placeholder="BlastHack es el foro/comunidad donde..." style="min-height:90px;"></textarea>
+      <div class="char-count" id="cc-bh">0 / 30 mín.</div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="field-grid" style="margin-bottom:1.1rem;">
+      <div class="field">
+        <label class="field-label" for="exp-programar">¿Sabés programar? ¿En qué lenguajes? <span class="opt">OPCIONAL</span></label>
+        <input type="text" id="exp-programar" placeholder="Lua, C++, Python... o 'solo uso scripts de otros'">
+      </div>
+    </div>
+
+    <div class="field-grid" style="margin-bottom:1.1rem;">
+      <div class="field">
+        <label class="field-label" for="exp-moonloader">Experiencia con MoonLoader <span class="opt">OPCIONAL</span></label>
+        <textarea id="exp-moonloader" placeholder="¿Cuánto tiempo llevás usando MoonLoader? ¿Qué scripts desarrollaste o adaptaste?" style="min-height:80px;"></textarea>
+      </div>
+    </div>
+
+    <div class="field-grid" style="margin-bottom:1.1rem;">
+      <div class="field">
+        <label class="field-label" for="exp-lua">Experiencia con Lua <span class="opt">OPCIONAL</span></label>
+        <textarea id="exp-lua" placeholder="¿Conocés funciones como sampAddChatMessage, lua_thread.create, samp.events, etc.?" style="min-height:80px;"></textarea>
+      </div>
+    </div>
+
+    <div class="field-grid" style="margin-bottom:1.1rem;">
+      <div class="field">
+        <label class="field-label" for="exp-blasthack-adv">¿Usás el wiki de BlastHack regularmente? <span class="opt">OPCIONAL</span></label>
+        <input type="text" id="exp-blasthack-adv" placeholder="Sí / No / A veces">
+      </div>
+    </div>
+
+    <!-- NUEVA PREGUNTA: IA -->
+    <div class="field-grid">
+      <div class="field">
+        <label class="field-label" for="exp-ia">¿Programás con IA? ¿Cuál? <span class="opt">OPCIONAL</span></label>
+        <input type="text" id="exp-ia" placeholder="ChatGPT, Claude, Copilot... o 'No uso IA'">
+        <p class="field-hint" style="margin-top:.35rem;">Sé sincero y honesto, nadie critica nada. Es solo para conocer tu flujo de trabajo.</p>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-ghost" onclick="prevStep(4)">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+        Atrás
+      </button>
+      <button class="btn btn-primary" onclick="nextStep(4)">
+        Continuar
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════
+       STEP 5 — FINAL
+  ═══════════════════════════════ -->
+  <div class="step-panel" id="panel-5">
+    <div class="section-tag">Paso 05 / 05</div>
+    <h2 class="section-title">Tu <span class="accent">Presentación</span></h2>
+
+    <div class="field" style="margin-bottom:1.4rem;">
+      <label class="field-label" for="presentacion">
+        Presentate: experiencia, motivación y qué aportarías al staff <span class="req">*</span>
+      </label>
+      <textarea id="presentacion" style="min-height:170px;" placeholder="Contanos tu recorrido en SA-MP, cuánto tiempo tenés disponible por semana, y por qué sos la persona indicada..."></textarea>
+      <div class="char-count" id="cc-pres">0 / 100 mín.</div>
+      <p class="field-hint" style="margin-top:.4rem;">Las postulaciones genéricas tienen baja probabilidad de aprobación.</p>
+    </div>
+
+    <div class="field" style="margin-bottom:1.4rem;">
+      <label class="field-label" for="motivacion">¿Por qué querés ser staff de MST Community específicamente, y no de otro servidor? <span class="req">*</span></label>
+      <textarea id="motivacion" style="min-height:100px;" placeholder="Contanos qué te diferencia del servidor, qué te generó el interés en formar parte del equipo..."></textarea>
+      <div class="char-count" id="cc-motiv">0 / 60 mín.</div>
+    </div>
+
+    <div class="field" style="margin-bottom:1.4rem;">
+      <label class="field-label">¿Cómo reaccionarías si un miembro del staff comete un error o abusa de su posición? <span class="req">*</span></label>
+      <div class="option-grid" style="margin-bottom:.5rem;">
+        <label class="opt-item"><input type="radio" name="reaccion-staff" value="Lo reporto al creador o admin superior"><div class="opt-body"><span class="opt-check"></span>Lo reporto al admin</div></label>
+        <label class="opt-item"><input type="radio" name="reaccion-staff" value="Intento hablarlo en privado primero"><div class="opt-body"><span class="opt-check"></span>Lo hablo en privado</div></label>
+        <label class="opt-item"><input type="radio" name="reaccion-staff" value="Lo ignoro si no me afecta directamente"><div class="opt-body"><span class="opt-check"></span>Lo ignoro</div></label>
+        <label class="opt-item"><input type="radio" name="reaccion-staff" value="Depende de la situación"><div class="opt-body"><span class="opt-check"></span>Depende</div></label>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- NORMAS -->
+    <div class="section-tag" style="margin-bottom:.7rem;">Normas del servidor</div>
+    <div class="rules-box">
+      <div class="rule-item"><span class="rule-num">RN1</span><span>Queda prohibido pedir, promocionar o mencionar otros servidores de Discord similares en cualquier canal.</span></div>
+      <div class="rule-item"><span class="rule-num">RN2</span><span>Está prohibido pedir algún rol o permiso de administrador dentro del servidor.</span></div>
+      <div class="rule-item"><span class="rule-num">RN3</span><span>Los canales de aportes son exclusivamente para compartir scripts. Está prohibido solicitar scripts o comentar directamente. Creá un hilo si querés discutir.</span></div>
+      <div class="rule-item"><span class="rule-num">RN4</span><span>Está totalmente prohibido publicar contenido pornográfico, ya sea en imágenes, videos o enlaces.</span></div>
+      <div class="rule-item"><span class="rule-num">RN5</span><span>No se tolerarán faltas de respeto, respuestas tóxicas o intentos de humillar a otros miembros. En conflictos graves, contactá al Staff.</span></div>
+      <div class="rule-item"><span class="rule-num">RN6</span><span>El uso indebido y repetido de los canales puede conllevar advertencias, muteos, restricciones temporales, expulsión o baneo.</span></div>
+      <div class="rule-item"><span class="rule-num">RN7</span><span>Queda prohibido subir scripts ofuscados o compilados sin verificación previa del Staff.</span></div>
+    </div>
+
+    <label class="chk-item" style="display:block;margin-bottom:.9rem;">
+      <input type="checkbox" id="reglas-check">
+      <div class="chk-body">
+        <div class="chk-square"><svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <p class="chk-text"><strong>Leí y acepto</strong> las normas del servidor listadas arriba.</p>
+      </div>
+    </label>
+
+    <label class="chk-item" style="display:block;margin-bottom:1rem;">
+      <input type="checkbox" id="terminos">
+      <div class="chk-body">
+        <div class="chk-square"><svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <p class="chk-text"><strong>Entiendo y acepto</strong> que el ingreso comienza como <strong>Ayudante</strong> (período de prueba). Comportamiento inadecuado, bajo rendimiento o inactividad prolongada pueden resultar en remoción del rango.</p>
+      </div>
+    </label>
+
+    <div class="btn-row">
+      <button class="btn btn-ghost" onclick="prevStep(5)">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+        Atrás
+      </button>
+      <button class="btn btn-success" id="submit-btn" onclick="submitForm()">
+        <span class="btn-text">
+          Enviar Postulación
+          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        </span>
+        <span class="spinner"></span>
+      </button>
+    </div>
+  </div>
+
+  <!-- SUCCESS SCREEN -->
+  <div id="success-screen">
+    <div class="success-icon-wrap">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+    </div>
+    <h2 class="success-title">Postulación Recibida</h2>
+    <p class="success-code">STATUS · SUBMITTED · OK</p>
+    <p class="success-sub">
+      Tu formulario fue recibido correctamente. El equipo lo revisará en los próximos días.
+      Mantené actividad constante en el servidor durante el proceso de evaluación.
+    </p>
+    <div style="
+      margin: 1.4rem 0 0;
+      padding: .9rem 1.1rem;
+      background: var(--orange-dim);
+      border: 1px solid rgba(232,114,26,0.25);
+      border-radius: var(--radius);
+      font-size: .88rem;
+      color: var(--text-2);
+      line-height: 1.65;
+      text-align: left;
+    ">
+      <span style="color:var(--orange); font-weight:600;">¿Qué pasa si soy aceptado?</span><br>
+      Si tu postulación es aprobada, el creador de MST Community te enviará una
+      <strong style="color:var(--text)">solicitud de amigo en Discord</strong> al usuario que indicaste en el formulario.
+      Asegurate de tener las solicitudes de amigos habilitadas para poder recibirla.
+    </div>
+    <a href="https://discord.gg/mst-community-1257189867020881962" target="_blank" rel="noopener" class="success-link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      Ir al servidor de MST Community
+    </a>
+  </div>
+
+  <!-- LICENSE -->
+  <div class="license-box">
+    <h3>MST Community License</h3>
+    <p>
+      Este formulario y su contenido son propiedad de <strong style="color:var(--orange)">MST Community</strong> ·
+      <a href="https://discord.com/users/1210282337850630217" target="_blank" rel="noopener">niourozi</a> ·
+      <a href="https://github.com/MST-Community" target="_blank" rel="noopener">github.com/MST-Community</a><br><br>
+      El uso, reproducción o distribución total o parcial de este material está prohibida sin autorización expresa de MST Community.
+      Los datos personales recopilados en este formulario se utilizan exclusivamente para el proceso de selección de Staff
+      y no serán compartidos con terceros. Referencias técnicas:
+      <a href="https://wiki.blast.hk" target="_blank" rel="noopener">wiki.blast.hk</a> ·
+      <a href="https://blast.hk" target="_blank" rel="noopener">BlastHack</a> ·
+      MoonLoader · MonetLoader
+    </p>
+  </div>
+
+  <footer>
+    <div>MST COMMUNITY · Scripts &amp; Automation · SA-MP PC &amp; Mobile</div>
+    <div>© <a href="https://discord.com/users/1210282337850630217" target="_blank" rel="noopener">niourozi</a> · <a href="https://discord.gg/mst-community-1257189867020881962" target="_blank" rel="noopener">discord.gg/mst-community</a></div>
+    <div style="margin-top:.4rem; font-size:.52rem;">
+      Powered by MoonLoader · <a href="https://wiki.blast.hk" target="_blank" rel="noopener" style="color:var(--text-3)">BlastHack</a> · MonetLoader
+    </div>
+  </footer>
+
+</div><!-- /wrapper -->
+
+<div id="toast">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+  <span id="toast-msg">—</span>
+</div>
+
+<!-- AUDIO: src se asigna vía fetch+Blob para forzar MIME type correcto -->
+<audio id="bg-music" loop preload="auto"></audio>
+
+<script>
+/* ═══════════════════════════════════════════
+   PROTECTION
+═══════════════════════════════════════════ */
+(function() {
+  document.addEventListener('contextmenu', e => e.preventDefault());
+  document.addEventListener('keydown', function(e) {
+    if (
+      (e.ctrlKey && ['u','U'].includes(e.key)) ||
+      (e.ctrlKey && e.shiftKey && ['i','I','j','J','c','C','k','K'].includes(e.key)) ||
+      e.key === 'F12'
+    ) { e.preventDefault(); e.stopPropagation(); return false; }
+  });
+  document.addEventListener('selectstart', function(e) {
+    if (!['INPUT','TEXTAREA'].includes(e.target.tagName)) e.preventDefault();
+  });
+  document.addEventListener('dragstart', e => e.preventDefault());
+
+  let devOpen = false;
+  setInterval(function() {
+    const open = (window.outerWidth - window.innerWidth > 160) ||
+                 (window.outerHeight - window.innerHeight > 160);
+    if (open && !devOpen) {
+      devOpen = true;
+      document.body.style.filter = 'blur(10px)';
+      document.body.style.pointerEvents = 'none';
+      document.getElementById('devtools-warn').classList.add('show');
+    } else if (!open && devOpen) {
+      devOpen = false;
+      document.body.style.filter = '';
+      document.body.style.pointerEvents = '';
+      document.getElementById('devtools-warn').classList.remove('show');
+    }
+  }, 800);
+})();
+
+/* ═══════════════════════════════════════════
+   MINI ERROR LOG — panel en pantalla + auto-copy
+═══════════════════════════════════════════ */
+(function() {
+  const errors = [];
+  let copyTimer = null;
+
+  // Crear panel
+  const panel = document.createElement('div');
+  panel.id = 'mst-errlog';
+  Object.assign(panel.style, {
+    position:'fixed', bottom:'70px', right:'12px', zIndex:'99997',
+    width:'300px', maxHeight:'180px', overflowY:'auto',
+    background:'#090c12', border:'1px solid #f85149',
+    borderRadius:'6px', fontFamily:"'JetBrains Mono',monospace",
+    fontSize:'10px', color:'#f85149', display:'none',
+    boxShadow:'0 4px 24px rgba(248,81,73,0.25)',
+    backdropFilter:'blur(8px)'
+  });
+  panel.innerHTML = `
+    <div style="display:flex;align-items:center;justify-content:space-between;
+      padding:5px 10px;border-bottom:1px solid #1a2030;background:#0e1219;
+      font-size:9px;letter-spacing:.12em;text-transform:uppercase;position:sticky;top:0;">
+      <span style="color:#f85149;">⚠ ERROR LOG</span>
+      <div style="display:flex;gap:6px;align-items:center;">
+        <span id="mst-errlog-copy" style="cursor:pointer;color:#4fa3e8;letter-spacing:.08em;"
+          title="Copiar al portapapeles">📋 copiar</span>
+        <span id="mst-errlog-close" style="cursor:pointer;color:#3d4a5e;font-size:12px;line-height:1;"
+          title="Cerrar">×</span>
+      </div>
+    </div>
+    <div id="mst-errlog-body" style="padding:6px 10px;"></div>`;
+  document.body.appendChild(panel);
+
+  function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+  function addEntry(type, msg, src, line) {
+    const t = new Date().toLocaleTimeString('es-AR',{hour12:false});
+    const txt = `[${t}] [${type}] ${String(msg)}${src?' @ '+src+(line?':'+line:''):''}`;
+    errors.push(txt);
+
+    const row = document.createElement('div');
+    row.style.cssText = 'margin-bottom:4px;padding-bottom:4px;border-bottom:1px solid #1a2030;word-break:break-all;line-height:1.55;';
+    const typeColor = type==='WARN'?'#e3b341':type==='PROMISE'?'#c9922a':'#f85149';
+    row.innerHTML = `<span style="color:#3d4a5e;">[${t}]</span> `
+      +`<span style="color:${typeColor};font-weight:700;">[${type}]</span> `
+      +`<span style="color:#dde5f0;">${esc(String(msg))}</span>`
+      +(src?`<br><span style="color:#3d4a5e;font-size:9px;">${esc(src)}${line?':'+line:''}</span>`:'');
+    document.getElementById('mst-errlog-body').appendChild(row);
+
+    panel.style.display = 'block';
+    panel.scrollTop = panel.scrollHeight;
+
+    // Auto-copy con debounce (espera 300ms por si vienen varios juntos)
+    clearTimeout(copyTimer);
+    copyTimer = setTimeout(() => autoCopy(), 300);
+  }
+
+  function autoCopy() {
+    const text = errors.join('\n');
+    if (!text) return;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).catch(() => fallbackCopy(text));
+    } else { fallbackCopy(text); }
+  }
+
+  function fallbackCopy(text) {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    Object.assign(ta.style,{position:'fixed',opacity:'0',top:'0',left:'0'});
+    document.body.appendChild(ta);
+    ta.focus(); ta.select();
+    try { document.execCommand('copy'); } catch(e) {}
+    document.body.removeChild(ta);
+  }
+
+  document.getElementById('mst-errlog-copy').addEventListener('click', () => {
+    autoCopy();
+    const btn = document.getElementById('mst-errlog-copy');
+    btn.textContent = '✅ copiado'; 
+    setTimeout(() => { btn.textContent = '📋 copiar'; }, 1500);
+  });
+  document.getElementById('mst-errlog-close').addEventListener('click', () => {
+    panel.style.display = 'none';
+  });
+
+  // Capturar window.onerror
+  const prevOnError = window.onerror;
+  window.onerror = function(msg, src, line, col, err) {
+    addEntry('ERROR', err ? (err.message||msg) : msg, src ? src.split('/').pop() : '', line);
+    if (prevOnError) prevOnError.apply(this, arguments);
+    return false;
+  };
+
+  // Capturar errores de recursos (script, img, etc.)
+  window.addEventListener('error', function(e) {
+    if (e.target && e.target !== window) {
+      const tag = e.target.tagName || 'RESOURCE';
+      const url = e.target.src || e.target.href || '';
+      addEntry('RES', `${tag} no cargó: ${url.split('/').pop()||url}`, '', '');
+    }
+  }, true);
+
+  // Capturar promesas rechazadas
+  window.addEventListener('unhandledrejection', function(e) {
+    const reason = e.reason;
+    const msg = reason instanceof Error ? reason.message : String(reason);
+    addEntry('PROMISE', msg);
+  });
+
+  // Interceptar console.error y console.warn
+  const origError = console.error.bind(console);
+  console.error = function(...args) {
+    addEntry('CON.ERR', args.map(a => typeof a==='object'?JSON.stringify(a):a).join(' '));
+    origError(...args);
+  };
+  const origWarn = console.warn.bind(console);
+  console.warn = function(...args) {
+    addEntry('WARN', args.map(a => typeof a==='object'?JSON.stringify(a):a).join(' '));
+    origWarn(...args);
+  };
+})();
+
+/* ═══════════════════════════════════════════
+   AUDIO — fetch+Blob para forzar MIME type correcto.
+   raw.githubusercontent.com sirve los archivos como
+   application/octet-stream; el <audio> los rechaza.
+   Al crear un Blob con 'audio/mpeg' el navegador lo acepta.
+═══════════════════════════════════════════ */
+(function() {
+  const AUDIO_URL = 'https://raw.githubusercontent.com/niourozi/niourozi.github.io/refs/heads/(root)/Welcome%20To%20Los%20Santos.mp3';
+  const music = document.getElementById('bg-music');
+  music.volume = 0.18;
+
+  let ready = false;
+  let wantsPlay = false;
+
+  function doPlay() {
+    music.play().catch(err => {
+      // Solo loguear si no es la política de autoplay (NotAllowedError)
+      if (err.name !== 'NotAllowedError') console.warn('[Audio]', err.message);
+    });
+  }
+
+  // Descargar el MP3 como ArrayBuffer y crear un Blob con MIME correcto
+  fetch(AUDIO_URL)
+    .then(function(res) {
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      return res.arrayBuffer();
+    })
+    .then(function(buf) {
+      const blob = new Blob([buf], { type: 'audio/mpeg' });
+      music.src = URL.createObjectURL(blob);
+      music.load();
+      ready = true;
+      if (wantsPlay) doPlay();
+    })
+    .catch(function(err) {
+      console.warn('[Audio] Fetch falló, usando src directo:', err.message);
+      // Fallback: asignar src directamente y esperar que el navegador lo acepte
+      music.src = AUDIO_URL;
+      music.load();
+      ready = true;
+      if (wantsPlay) doPlay();
+    });
+
+  // Primer intento de play (fallará por autoplay policy, pero queda pendiente)
+  wantsPlay = true;
+  if (ready) doPlay();
+
+  // Desbloquear en el primer gesto del usuario
+  function unlockAudio() {
+    if (ready) { doPlay(); }
+    else { wantsPlay = true; }
+  }
+  document.addEventListener('click',      unlockAudio, { capture: true, once: true, passive: true });
+  document.addEventListener('touchstart', unlockAudio, { capture: true, once: true, passive: true });
+  document.addEventListener('keydown',    unlockAudio, { capture: true, once: true, passive: true });
+})();
+
+/* ═══════════════════════════════════════════
+   AUDIO BEEPS (Web Audio API)
+═══════════════════════════════════════════ */
+const AC = window.AudioContext || window.webkitAudioContext;
+let ac = null;
+function getAC() {
+  if (!ac) { try { ac = new AC(); } catch(e) {} }
+  if (ac && ac.state === 'suspended') { ac.resume(); }
+  return ac;
+}
+function beep(freqs, type='sine') {
+  const ctx = getAC(); if (!ctx) return;
+  freqs.forEach(([freq, t0, dur, vol]) => {
+    const osc = ctx.createOscillator(), g = ctx.createGain();
+    osc.connect(g); g.connect(ctx.destination);
+    osc.type = type; osc.frequency.value = freq;
+    const t = ctx.currentTime + (t0||0);
+    g.gain.setValueAtTime(0,t);
+    g.gain.linearRampToValueAtTime(vol||0.06, t+0.025);
+    g.gain.exponentialRampToValueAtTime(0.001, t+(dur||0.1));
+    osc.start(t); osc.stop(t+(dur||0.1)+0.01);
+  });
+}
+const playTick       = () => beep([[880,0,0.07,0.05],[660,0.04,0.06,0.03]]);
+const playTransition = () => beep([[440,0,0.18,0.06],[554,0.08,0.18,0.06]]);
+const playSuccess    = () => beep([[523,0,0.3,0.09],[659,0.1,0.3,0.09],[784,0.2,0.3,0.09]]);
+
+/* ═══════════════════════════════════════════
+   LANGUAGE PICKER
+═══════════════════════════════════════════ */
+const LANG_CODES = [
+  'af','sq','am','ar','hy','az','eu','be','bn','bs','bg','ca','ceb','zh','co',
+  'hr','cs','da','nl','en','eo','et','tl','fi','fr','fy','gl','ka','de','el',
+  'gu','ht','ha','he','hi','hu','is','ig','id','ga','it','ja','jv','kn','kk',
+  'km','rw','ko','ku','ky','lo','la','lv','lt','lb','mk','mg','ms','ml','mt',
+  'mi','mr','mn','my','ne','no','ps','fa','pl','pt','pa','ro','ru','sm','gd',
+  'sr','st','sn','sd','si','sk','sl','so','es','su','sw','sv','tg','ta','te',
+  'th','tr','uk','ur','uz','vi','cy','xh','yi','yo','zu','oc','br','be','tt',
+  'tk','ab','bo','dz','ff','fj','fo','ln','na','nv','pi','qu','sc','se','sg',
+  'ug','vo','wa','wo','za'
+];
+
+// ── País picker — Intl.DisplayNames (todos los países, idioma del navegador) ──
+const COUNTRY_CODES = [
+  'AF','AL','DZ','AD','AO','AG','AR','AM','AU','AT','AZ','BS','BH','BD','BB',
+  'BY','BE','BZ','BJ','BT','BO','BA','BW','BR','BN','BG','BF','BI','CV','KH',
+  'CM','CA','CF','TD','CL','CN','CO','KM','CG','CD','CR','HR','CU','CY','CZ',
+  'DK','DJ','DM','DO','EC','EG','SV','GQ','ER','EE','SZ','ET','FJ','FI','FR',
+  'GA','GM','GE','DE','GH','GR','GD','GT','GN','GW','GY','HT','HN','HU','IS',
+  'IN','ID','IR','IQ','IE','IL','IT','JM','JP','JO','KZ','KE','KI','KP','KR',
+  'KW','KG','LA','LV','LB','LS','LR','LY','LI','LT','LU','MG','MW','MY','MV',
+  'ML','MT','MH','MR','MU','MX','FM','MD','MC','MN','ME','MA','MZ','MM','NA',
+  'NR','NP','NL','NZ','NI','NE','NG','MK','NO','OM','PK','PW','PA','PG','PY',
+  'PE','PH','PL','PT','QA','RO','RU','RW','KN','LC','VC','WS','SM','ST','SA',
+  'SN','RS','SC','SL','SG','SK','SI','SB','SO','ZA','SS','ES','LK','SD','SR',
+  'SE','CH','SY','TW','TJ','TZ','TH','TL','TG','TO','TT','TN','TR','TM','TV',
+  'UG','UA','AE','GB','US','UY','UZ','VU','VE','VN','YE','ZM','ZW','PR','HK',
+  'MO','PS','XK'
+];
+
+// Detectar idioma del navegador para mostrar los países traducidos
+const browserLang = navigator.language || navigator.languages?.[0] || 'es';
+const COUNTRIES = (() => {
+  let displayNames;
+  try { displayNames = new Intl.DisplayNames([browserLang, 'es'], { type: 'region' }); } catch(e) {}
+  const result = [];
+  COUNTRY_CODES.forEach(code => {
+    let name;
+    try { name = displayNames ? displayNames.of(code) : null; } catch(e) {}
+    if (!name || name === code) return;
+    result.push({ code, name });
+  });
+  result.sort((a, b) => a.name.localeCompare(b.name, browserLang));
+  return result;
+})();
+
+let selectedPais = '';
+
+const paisTagsWrap = document.getElementById('pais-tags-wrap');
+const paisSearch   = document.getElementById('pais-search');
+const paisDropdown = document.getElementById('pais-dropdown');
+const paisHidden   = document.getElementById('pais');
+
+function renderPaisTag() {
+  paisTagsWrap.querySelectorAll('.lang-tag').forEach(t => t.remove());
+  if (selectedPais) {
+    const tag = document.createElement('span');
+    tag.className = 'lang-tag';
+    tag.innerHTML = selectedPais.name + '<button class="lang-tag-x" title="Quitar">×</button>';
+    paisTagsWrap.insertBefore(tag, paisSearch);
+    paisSearch.placeholder = '';
+    paisHidden.value = selectedPais.name;
+  } else {
+    paisSearch.placeholder = 'Buscar país...';
+    paisHidden.value = '';
+  }
+}
+
+function renderPaisDropdown() {
+  const q = paisSearch.value.trim().toLowerCase();
+  const filtered = q
+    ? COUNTRIES.filter(c => c.name.toLowerCase().includes(q) || c.code.toLowerCase() === q)
+    : COUNTRIES;
+  paisDropdown.innerHTML = '';
+  if (filtered.length === 0) {
+    paisDropdown.innerHTML = '<div class="lang-no-res">Sin resultados para "' + paisSearch.value + '"</div>';
+    return;
+  }
+  filtered.forEach(country => {
+    const isSel = selectedPais && selectedPais.code === country.code;
+    const div = document.createElement('div');
+    div.className = 'lang-opt' + (isSel ? ' sel' : '');
+    div.dataset.code = country.code;
+    div.dataset.name = country.name;
+    div.innerHTML = '<span>' + country.name + '</span>' + (isSel ? '<span class="lang-tick"><svg viewBox="0 0 10 8" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 4L3.5 6.5L9 1"/></svg></span>' : '');
+    paisDropdown.appendChild(div);
+  });
+}
+
+paisSearch.addEventListener('focus', () => { renderPaisDropdown(); paisDropdown.classList.add('open'); });
+paisSearch.addEventListener('input', () => { renderPaisDropdown(); paisDropdown.classList.add('open'); });
+paisDropdown.addEventListener('mousedown', e => {
+  const opt = e.target.closest('.lang-opt');
+  if (!opt) return;
+  e.preventDefault();
+  selectedPais = { code: opt.dataset.code, name: opt.dataset.name };
+  paisSearch.value = '';
+  renderPaisTag();
+  renderPaisDropdown();
+  paisDropdown.classList.remove('open');
+  playTick();
+});
+paisTagsWrap.addEventListener('click', e => {
+  const btn = e.target.closest('.lang-tag-x');
+  if (btn) {
+    selectedPais = '';
+    renderPaisTag();
+    renderPaisDropdown();
+    return;
+  }
+  if (!selectedPais) paisSearch.focus();
+});
+document.addEventListener('click', e => {
+  if (!document.getElementById('pais-picker').contains(e.target)) {
+    paisDropdown.classList.remove('open');
+  }
+});
+
+const LANGUAGES = (() => {
+  let displayNames;
+  try { displayNames = new Intl.DisplayNames(['es'], { type: 'language' }); } catch(e) {}
+  const seen = new Set();
+  const result = [];
+  LANG_CODES.forEach(code => {
+    if (seen.has(code)) return;
+    seen.add(code);
+    let name;
+    try { name = displayNames ? displayNames.of(code) : null; } catch(e) {}
+    if (!name || name === code) return;
+    result.push({ code, name });
+  });
+  result.sort((a, b) => a.name.localeCompare(b.name, 'es'));
+  return result;
+})();
+
+const selectedLangs = new Set();
+const langTagsWrap  = document.getElementById('lang-tags-wrap');
+const langSearch    = document.getElementById('lang-search');
+const langDropdown  = document.getElementById('lang-dropdown');
+
+function renderLangTags() {
+  langTagsWrap.querySelectorAll('.lang-tag').forEach(t => t.remove());
+  selectedLangs.forEach(code => {
+    const lang = LANGUAGES.find(l => l.code === code);
+    if (!lang) return;
+    const tag = document.createElement('span');
+    tag.className = 'lang-tag';
+    tag.innerHTML = `${lang.name}<button class="lang-tag-x" data-code="${code}" title="Quitar">×</button>`;
+    langTagsWrap.insertBefore(tag, langSearch);
+  });
+}
+
+function renderLangDropdown() {
+  const q = langSearch.value.trim().toLowerCase();
+  const filtered = LANGUAGES.filter(l =>
+    l.name.toLowerCase().includes(q) || l.code.toLowerCase().startsWith(q)
+  );
+  langDropdown.innerHTML = '';
+  if (filtered.length === 0) {
+    langDropdown.innerHTML = '<div class="lang-no-res">Sin resultados para "' + langSearch.value + '"</div>';
+    return;
+  }
+  const sorted = [...filtered.filter(l => selectedLangs.has(l.code)), ...filtered.filter(l => !selectedLangs.has(l.code))];
+  sorted.forEach(lang => {
+    const div = document.createElement('div');
+    div.className = 'lang-opt' + (selectedLangs.has(lang.code) ? ' sel' : '');
+    div.dataset.code = lang.code;
+    div.innerHTML = `<span>${lang.name}</span><span class="lang-tick"><svg viewBox="0 0 10 8" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 4L3.5 6.5L9 1"/></svg></span>`;
+    langDropdown.appendChild(div);
+  });
+}
+
+langSearch.addEventListener('focus', () => {
+  renderLangDropdown();
+  langDropdown.classList.add('open');
+});
+langSearch.addEventListener('input', () => {
+  renderLangDropdown();
+  langDropdown.classList.add('open');
+});
+langDropdown.addEventListener('mousedown', e => {
+  const opt = e.target.closest('.lang-opt');
+  if (!opt) return;
+  e.preventDefault();
+  const code = opt.dataset.code;
+  if (selectedLangs.has(code)) { selectedLangs.delete(code); }
+  else { selectedLangs.add(code); }
+  renderLangTags();
+  renderLangDropdown();
+  playTick();
+  langSearch.focus();
+});
+langTagsWrap.addEventListener('click', e => {
+  const btn = e.target.closest('.lang-tag-x');
+  if (btn) {
+    selectedLangs.delete(btn.dataset.code);
+    renderLangTags();
+    renderLangDropdown();
+    return;
+  }
+  langSearch.focus();
+});
+document.addEventListener('click', e => {
+  if (!document.getElementById('lang-picker').contains(e.target)) {
+    langDropdown.classList.remove('open');
+  }
+});
+
+/* ═══════════════════════════════════════════
+   MONACO EDITOR
+═══════════════════════════════════════════ */
+const LUA_HELLO_WORLD = `function main()
+
+    while not isSampAvailable() do
+        wait(100)
+    end
+
+    sampAddChatMessage("Hello World", -1)
+
+    while true do
+        wait(0)
+    end
+
+end`;
+
+let monacoEditor = null;
+
+require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs' } });
+
+require(['vs/editor/editor.main'], function() {
+  monaco.editor.defineTheme('mst-dark', {
+    base: 'vs-dark', inherit: true,
+    rules: [
+      { token: 'keyword',         foreground: 'C586C0', fontStyle: 'bold' },
+      { token: 'string',          foreground: 'CE9178' },
+      { token: 'number',          foreground: 'B5CEA8' },
+      { token: 'comment',         foreground: '6A9955', fontStyle: 'italic' },
+      { token: 'identifier',      foreground: '9CDCFE' },
+      { token: 'type.identifier', foreground: '4EC9B0' },
+      { token: 'delimiter',       foreground: 'D4D4D4' },
+      { token: 'operator',        foreground: 'D4D4D4' },
+    ],
+    colors: {
+      'editor.background':              '#1e1e1e',
+      'editor.foreground':              '#d4d4d4',
+      'editorLineNumber.foreground':    '#4e5568',
+      'editorCursor.foreground':        '#e8721a',
+      'editor.selectionBackground':     '#264f78',
+      'editor.lineHighlightBackground': '#2a2a2a',
+      'editorIndentGuide.background':   '#2a2d3a',
+      'scrollbarSlider.background':     '#3d3d3d88',
+    }
+  });
+
+  monacoEditor = monaco.editor.create(document.getElementById('monaco-container'), {
+    value: LUA_HELLO_WORLD, language: 'lua', theme: 'mst-dark',
+    fontSize: 13, fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
+    fontLigatures: true, lineNumbers: 'on', minimap: { enabled: false },
+    scrollBeyondLastLine: false, wordWrap: 'on', automaticLayout: true,
+    renderLineHighlight: 'line', smoothScrolling: true,
+    cursorBlinking: 'smooth', cursorSmoothCaretAnimation: 'on',
+    tabSize: 4, padding: { top: 12, bottom: 12 },
+    overviewRulerLanes: 0, hideCursorInOverviewRuler: true,
+    occurrencesHighlight: false, selectionHighlight: true,
+    roundedSelection: true, contextmenu: true,
+    quickSuggestions: { other: true, comments: false, strings: true },
+    suggestOnTriggerCharacters: true,
+  });
+
+  monacoEditor.onDidChangeModelContent(() => {
+    document.getElementById('lua-editor').value = monacoEditor.getValue();
+  });
+  document.getElementById('lua-editor').value = monacoEditor.getValue();
+});
+
+function copyCode() {
+  const code = monacoEditor ? monacoEditor.getValue() : document.getElementById('lua-editor').value;
+  navigator.clipboard.writeText(code).then(() => toastMsg('Código copiado al portapapeles', 'green'));
+}
+function exportLua() {
+  const code = monacoEditor ? monacoEditor.getValue() : document.getElementById('lua-editor').value;
+  const blob = new Blob([code], { type: 'text/plain;charset=utf-8' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href = url; a.download = 'codigo.lua'; a.click();
+  URL.revokeObjectURL(url);
+  toastMsg('Exportado como codigo.lua', 'orange');
+}
+function toastMsg(msg, color) {
+  const t = document.getElementById('toast');
+  document.getElementById('toast-msg').textContent = msg;
+  t.style.color = color === 'green' ? 'var(--green)' : color === 'orange' ? 'var(--orange)' : 'var(--red)';
+  t.classList.add('show');
+  setTimeout(() => { t.classList.remove('show'); t.style.color = ''; }, 3000);
+}
+
+/* ═══════════════════════════════════════════
+   STEP MACHINE  (TOTAL = 5)
+═══════════════════════════════════════════ */
+let currentStep = 1;
+const TOTAL = 5;
+
+function updateProgress(step) {
+  document.getElementById('progress-fill').style.width = (step / TOTAL * 100) + '%';
+  document.querySelectorAll('.step-nav .step-item').forEach(el => {
+    const s = parseInt(el.dataset.step);
+    el.classList.remove('active','done');
+    if (s === step) el.classList.add('active');
+    if (s < step)   el.classList.add('done');
+  });
+  document.querySelectorAll('.step-connector').forEach(el => {
+    el.style.background = parseInt(el.dataset.conn) < step ? 'var(--orange)' : '';
+  });
+}
+
+function goToStep(from, to) {
+  const fe = document.getElementById('panel-' + from);
+  const te = document.getElementById('panel-' + to);
+  fe.classList.add('exit');
+  setTimeout(() => {
+    fe.classList.remove('active','exit');
+    te.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, 260);
+  currentStep = to;
+  updateProgress(to);
+  playTransition();
+}
+
+const DEV_PASS = 'T9!vQ#4xM@L7p$Z2^eR';
+function hasDevPass() {
+  return [...document.querySelectorAll('input[type="text"],input[type="number"],textarea')]
+    .some(el => el.value.includes(DEV_PASS));
+}
+function nextStep(from) { if ((hasDevPass() || validate(from)) && from < TOTAL) goToStep(from, from + 1); }
+function prevStep(from) { if (from > 1) goToStep(from, from - 1); }
+
+/* ═══════════════════════════════════════════
+   VALIDATION
+═══════════════════════════════════════════ */
+function markInvalid(el)  { el.classList.add('invalid'); }
+function clearInvalid(el) { el.classList.remove('invalid'); }
+
+function toast(msg) {
+  const t = document.getElementById('toast');
+  document.getElementById('toast-msg').textContent = msg;
+  t.style.color = '';
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3200);
+}
+
+function validate(step) {
+  if (step === 1) {
+    const n = document.getElementById('nombre');
+    const e = document.getElementById('edad');
+    const p = document.getElementById('pais');
+    const d = document.getElementById('discord');
+    const g = document.getElementById('genero');
+    let ok = true;
+    [n,e,d,g].forEach(el => { clearInvalid(el); if (!el.value.trim()) { markInvalid(el); ok=false; } });
+    if (!selectedPais) {
+      document.getElementById('pais-tags-wrap').classList.add('invalid-lp');
+      ok = false;
+    } else {
+      document.getElementById('pais-tags-wrap').classList.remove('invalid-lp');
+    }
+    if (e.value && (parseInt(e.value) < 13 || parseInt(e.value) > 80)) { markInvalid(e); ok=false; }
+    if (selectedLangs.size === 0) {
+      langTagsWrap.classList.add('invalid-lp');
+      ok = false;
+    } else {
+      langTagsWrap.classList.remove('invalid-lp');
+    }
+    if (!document.querySelector('input[name="disponibilidad"]:checked')) { toast('Indicá cuántas horas por semana podés dedicarle'); return false; }
+    if (!document.querySelector('input[name="baneado"]:checked'))       { toast('Respondé si alguna vez fuiste baneado'); return false; }
+    if (!document.querySelector('input[name="antiguedad"]:checked'))    { toast('Indicá hace cuánto sos miembro del servidor'); return false; }
+    if (!document.querySelector('input[name="dispositivo"]:checked')) { toast('Seleccioná qué plataforma usás'); return false; }
+    if (!document.querySelector('input[name="normas"]:checked'))       { toast('Indicá si conocés las normas del servidor'); return false; }
+    if (!ok) { toast('Completá todos los campos obligatorios'); return false; }
+    // Anti-gibberish en campos de texto libre del paso 1
+    if (!checkGib('nombre',  'Nombre'))  return false;
+    if (!checkGib('discord', 'Discord')) return false;
+    return true;
+  }
+
+  if (step === 2) {
+    const pcChecked  = document.querySelectorAll('input[name="scripts-pc"]:checked').length;
+    const mobChecked = document.querySelectorAll('input[name="scripts-mobile"]:checked').length;
+    if (pcChecked === 0 && mobChecked === 0) { toast('Marcá al menos un script en el que tenés experiencia'); return false; }
+    return true;
+  }
+
+  if (step === 3) {
+    const lp = document.getElementById('install-lua-pc');
+    const lm = document.getElementById('install-lua-mobile');
+    const cp = document.getElementById('caso-pc');
+    const cm = document.getElementById('caso-mobile');
+    [lp,lm,cp,cm].forEach(clearInvalid);
+    let ok = true;
+    if (lp.value.trim().length < 30) { markInvalid(lp); ok=false; }
+    if (lm.value.trim().length < 30) { markInvalid(lm); ok=false; }
+    if (cp.value.trim().length < 30) { markInvalid(cp); ok=false; }
+    if (cm.value.trim().length < 30) { markInvalid(cm); ok=false; }
+    if (!ok) { toast('Completá los campos técnicos con más detalle (mínimo 30 caracteres cada uno)'); return false; }
+    // Anti-gibberish en los campos técnicos
+    if (!checkGib('install-lua-pc',     'Instalar Lua PC'))     return false;
+    if (!checkGib('install-lua-mobile', 'Instalar Lua Mobile')) return false;
+    if (!checkGib('caso-pc',            'Caso PC'))             return false;
+    if (!checkGib('caso-mobile',        'Caso Mobile'))         return false;
+    return true;
+  }
+
+  if (step === 3) {
+    const conf = document.getElementById('caso-conflicto');
+    if (!conf || !conf.value.trim() || conf.value.trim().length < 10) {
+      if (conf) markInvalid(conf);
+      toast('Completá el caso de manejo de conflicto');
+      return false;
+    }
+    if (!checkGib('caso-conflicto', 'Caso conflicto')) return false;
+    return true;
+  }
+
+  if (step === 4) {
+    // Nivel técnico es REQUERIDO
+    if (!document.querySelector('input[name="nivel"]:checked')) {
+      toast('Seleccioná tu nivel técnico para continuar');
+      return false;
+    }
+    // BlastHack: si tiene algo, que tenga al menos 10 chars
+    const bh = document.getElementById('blasthack');
+    clearInvalid(bh);
+    if (bh.value.trim().length > 0 && bh.value.trim().length < 10) {
+      markInvalid(bh); toast('Si completás BlastHack, escribí al menos 10 caracteres'); return false;
+    }
+    if (bh.value.trim().length >= 10 && !checkGib('blasthack', 'BlastHack')) return false;
+    return true;
+  }
+
+  if (step === 5) {
+    const pr = document.getElementById('presentacion'); clearInvalid(pr);
+    if (!pr.value.trim()) { markInvalid(pr); toast('Completá tu presentación'); return false; }
+    if (!checkGib('presentacion', 'Presentación')) return false;
+    const motiv = document.getElementById('motivacion');
+    if (!motiv || !motiv.value.trim() || motiv.value.trim().length < 10) {
+      if (motiv) markInvalid(motiv);
+      toast('Completá el campo de motivación');
+      return false;
+    }
+    if (!document.querySelector('input[name="reaccion-staff"]:checked')) { toast('Respondé cómo reaccionarías ante un abuso de staff'); return false; }
+    if (!checkGib('motivacion', 'Motivación')) return false;
+    if (!document.getElementById('reglas-check').checked) { toast('Debés aceptar las normas del servidor'); return false; }
+    if (!document.getElementById('terminos').checked)     { toast('Debés aceptar el acuerdo del período de prueba'); return false; }
+    return true;
+  }
+  return true;
+}
+
+/* ═══════════════════════════════════════════
+   ANTI-GIBBERISH — Hugging Face Inference API
+   Model: madhurjindal/autonlp-Gibberish-Detector-492513457
+   Categorías: noise | word_salad | mild_gibberish | clean
+   ─────────────────────────────────────────
+   noise      → "jhasjhdsaj", "asdfgh"  → BLOQUEADO
+   word_salad → "gato mesa silla luna"  → BLOQUEADO
+   mild_gib   → texto medio coherente   → permitido (puede ser español informal)
+   clean      → texto real y coherente  → permitido ✅
+   ─────────────────────────────────────────
+   API pública HF — sin clave requerida (rate limit básico).
+   Para más requests/hora: creá un token gratis en huggingface.co
+   y pegalo en HF_TOKEN abajo.
+═══════════════════════════════════════════ */
+const HF_TOKEN  = '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';
+const HF_API    = 'https://router.huggingface.co/hf-inference/models/madhurjindal/autonlp-Gibberish-Detector-492513457';
+const GIB_API_MIN = 18; // largo mínimo para llamar a la API (textos muy cortos dan falsos positivos)
+
+// Cache por ID de campo: { status: 'ok'|'bad'|'pending'|'skip', label: string }
+const gibCache = {};
+
+// ── Capa 1: heurísticas locales (instantáneas, sin red) ──────────────────────
+function localGibCheck(s) {
+  const raw = s.toLowerCase();
+  const t = raw.replace(/[^a-záéíóúüñ]/g, '');
+  if (t.length < 5) return false;
+
+  const hasSpaces = raw.trim().includes(' ');
+
+  // 4+ del mismo carácter seguidos: aaaa, ssssss, jjjjj
+  if (/(.){3,}/.test(t)) return true;
+
+  // Secuencias de fila de teclado >= 5 chars — solo aplica sin espacios
+  // (texto normal puede tener substrings como esas dentro de palabras reales)
+  if (!hasSpaces) {
+    for (const row of ['qwertyuiop','asdfghjklñ','zxcvbnm']) {
+      for (let i = 0; i <= row.length - 5; i++) {
+        const fwd = row.slice(i, i + 5);
+        if (t.includes(fwd) || t.includes(fwd.split('').reverse().join(''))) return true;
+      }
+    }
+  }
+
+  const vowels = (t.match(/[aeiouáéíóúü]/g) || []).length;
+
+  // Sin espacios y largo > 12 → posible spam de teclado
+  if (!hasSpaces && raw.trim().length > 12) {
+    // Letras mezcladas con números sin espacios → gibberish (ej: iu3yuqwekhd3q)
+    if (/\d/.test(raw)) return true;
+    // Muy pocas vocales en string sin espacios
+    if (t.length > 15 && vowels / t.length < 0.20) return true;
+    // Ratio chars únicos bajo solo en strings cortos sin espacios
+    if (t.length <= 20 && new Set(t).size / t.length < 0.28) return true;
+  }
+
+  return false;
+}
+
+// ── Capa 2: HuggingFace Inference API (async, con reintentos) ────────────────
+async function callGibApi(id, text) {
+  gibCache[id] = { status: 'pending', label: '' };
+  const headers = { 'Content-Type': 'application/json' };
+  if (HF_TOKEN) headers['Authorization'] = 'Bearer ' + HF_TOKEN;
+
+  const MAX_RETRIES = 3;
+  const RETRY_DELAY_MS = 5000;
+
+  for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
+    try {
+      const res = await fetch(HF_API, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({ inputs: text, wait_for_model: true })
+      });
+
+      // 503 = modelo en cold start, 429 = rate limit → reintentar
+      if (res.status === 503 || res.status === 429) {
+        const body = await res.json().catch(() => ({}));
+        const waitMs = body.estimated_time ? body.estimated_time * 1000 : RETRY_DELAY_MS;
+        console.warn('[GibAPI] Intento ' + attempt + '/' + MAX_RETRIES + ' - modelo cargando (HTTP ' + res.status + '), reintentando en ' + Math.round(waitMs/1000) + 's...');
+        if (attempt < MAX_RETRIES) {
+          await new Promise(r => setTimeout(r, waitMs));
+          continue;
+        }
+        throw new Error('HTTP ' + res.status + ' tras ' + MAX_RETRIES + ' intentos');
+      }
+
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+
+      const data = await res.json();
+      // La API devuelve [[{label, score}, ...]] o [{label, score}, ...]
+      const arr  = Array.isArray(data[0]) ? data[0] : data;
+      const top  = arr.sort((a, b) => b.score - a.score)[0];
+      const lbl  = top?.label || '';
+      // Solo bloquear si el modelo está muy seguro (score >= 0.80)
+      // Texto técnico (SA-MP, Lua, moonloader) puede clasificarse mal con baja confianza
+      const bad  = (lbl === 'noise' || lbl === 'word_salad') && top.score >= 0.80;
+      gibCache[id] = { status: bad ? 'bad' : 'ok', label: lbl };
+      return { bad, label: lbl };
+
+    } catch(e) {
+      if (attempt < MAX_RETRIES) {
+        console.warn('[GibAPI] Intento ' + attempt + '/' + MAX_RETRIES + ' fallido: ' + e.message + '. Reintentando...');
+        await new Promise(r => setTimeout(r, RETRY_DELAY_MS));
+      } else {
+        console.warn('[GibAPI] Falló tras ' + MAX_RETRIES + ' intentos: ' + e.message + '. Continuando sin verificación API.');
+        gibCache[id] = { status: 'skip', label: 'err' };
+        return { bad: false, label: 'err' };
+      }
+    }
+  }
+}
+
+// ── Campos con sus etiquetas y largo mínimo para activar el check ─────────────
+const GIB_FIELDS = [
+  { id: 'nombre',             label: 'Nombre',              min: 5  },
+  { id: 'discord',            label: 'Discord',             min: 5  },
+  { id: 'blasthack',          label: 'BlastHack',           min: 18 },
+  { id: 'install-lua-pc',     label: 'Instalar Lua PC',     min: 18 },
+  { id: 'install-lua-mobile', label: 'Instalar Lua Mobile', min: 18 },
+  { id: 'caso-pc',            label: 'Caso PC',             min: 18 },
+  { id: 'caso-mobile',        label: 'Caso Mobile',         min: 18 },
+  { id: 'presentacion',       label: 'Presentación',        min: 18 },
+  { id: 'aporte-comunidad',   label: 'Aporte comunidad',    min: 18 },
+  { id: 'caso-conflicto',     label: 'Caso conflicto',      min: 18 },
+  { id: 'motivacion',         label: 'Motivación',          min: 18 },
+  { id: 'exp-programar',      label: 'Exp. programar',      min: 18 },
+  { id: 'exp-moonloader',     label: 'Exp. MoonLoader',     min: 18 },
+  { id: 'exp-lua',            label: 'Exp. Lua',            min: 18 },
+  { id: 'exp-blasthack-adv',  label: 'Exp. BlastHack',      min: 18 },
+  { id: 'exp-ia',             label: 'Exp. IA',             min: 18 },
+];
+
+// ── Listeners: feedback inmediato en blur ─────────────────────────────────────
+GIB_FIELDS.forEach(({ id, label, min }) => {
+  const el = document.getElementById(id);
+  if (!el) return;
+
+  // Al editar → invalidar cache para ese campo
+  el.addEventListener('input', () => { delete gibCache[id]; clearInvalid(el); });
+
+  el.addEventListener('blur', async () => {
+    const val = el.value.trim();
+    if (val.length < min) return;
+
+    // Capa 1: local (instantáneo)
+    if (localGibCheck(val)) {
+      markInvalid(el);
+      toast(`"${label}": parece texto aleatorio — escribí algo real.`);
+      gibCache[id] = { status: 'bad', label: 'local' };
+      return;
+    }
+
+    // Capa 2: API (async, solo si hay suficiente texto y no hay cache)
+    if (val.length >= GIB_API_MIN && !gibCache[id]) {
+      const { bad, label: lbl } = await callGibApi(id, val);
+      if (bad) {
+        markInvalid(el);
+        toast(lbl === 'noise'
+          ? `"${label}": eso son caracteres aleatorios, no una respuesta real.`
+          : `"${label}": las palabras no forman una respuesta coherente.`);
+      }
+    }
+  });
+});
+
+// ── Helper para validate(): chequea cache + local ────────────────────────────
+function checkGib(id, label) {
+  const el = document.getElementById(id);
+  if (!el) return true;
+  const val = el.value.trim();
+  if (val.length < 4) return true;
+
+  // Capa 1
+  if (localGibCheck(val)) {
+    markInvalid(el);
+    toast(`"${label}": no rellenes con texto aleatorio.`);
+    return false;
+  }
+
+  // Resultado de la API en cache
+  const c = gibCache[id];
+  if (c?.status === 'bad') {
+    markInvalid(el);
+    toast(c.label === 'noise'
+      ? `"${label}": caracteres aleatorios — escribí una respuesta real.`
+      : `"${label}": las palabras no tienen coherencia — respondé con detalle.`);
+    return false;
+  }
+  if (c?.status === 'pending') {
+    toast(`Verificando "${label}"... esperá un segundo e intentá de nuevo.`);
+    return false;
+  }
+
+  return true; // ok, skip, err → no bloquear
+}
+
+/* ═══════════════════════════════════════════
+   CHAR COUNTERS
+═══════════════════════════════════════════ */
+function charCounter(id, ctId, min) {
+  const el = document.getElementById(id);
+  const ct = document.getElementById(ctId);
+  if (!el || !ct) return;
+  el.addEventListener('input', () => {
+    const len = el.value.trim().length;
+    ct.textContent = len + ' / ' + min + ' mín.';
+    ct.className = 'char-count' + (len >= min ? ' ok' : len >= min * .6 ? ' warn-count' : '');
+  });
+}
+charCounter('blasthack','cc-bh',30);
+charCounter('aporte-comunidad','cc-aporte',60);
+charCounter('caso-conflicto','cc-conflicto',60);
+charCounter('motivacion','cc-motiv',60);
+charCounter('install-lua-pc','cc-lua-pc',60);
+charCounter('install-lua-mobile','cc-lua-mob',60);
+charCounter('caso-pc','cc-pc',60);
+charCounter('caso-mobile','cc-mob-case',60);
+charCounter('presentacion','cc-pres',100);
+
+/* Input interactions */
+document.querySelectorAll('input[type="text"],input[type="number"],textarea,select').forEach(el => {
+  el.addEventListener('input',  () => clearInvalid(el));
+  el.addEventListener('change', () => clearInvalid(el));
+  el.addEventListener('focus',  () => getAC());
+});
+document.querySelectorAll('input[type="radio"],input[type="checkbox"]').forEach(el => {
+  el.addEventListener('change', () => playTick());
+});
+
+/* ═══════════════════════════════════════════
+   ANTI-SPAM
+═══════════════════════════════════════════ */
+let lastSubmit = 0;
+function canSubmit() {
+  const now = Date.now();
+  if (now - lastSubmit < 30000) return false;
+  lastSubmit = now;
+  return true;
+}
+
+/* ═══════════════════════════════════════════
+   SUBMIT — envía código Lua como archivo adjunto
+═══════════════════════════════════════════ */
+async function submitForm() {
+  if (!hasDevPass() && !validate(5)) return;
+  if (!canSubmit()) { toast('Esperá unos segundos antes de intentar de nuevo'); return; }
+
+  // Sincronizar Monaco con el textarea oculto
+  if (monacoEditor) {
+    document.getElementById('lua-editor').value = monacoEditor.getValue();
+  }
+
+  const btn = document.getElementById('submit-btn');
+  btn.classList.add('loading'); btn.disabled = true;
+
+  const trunc = (s, n) => s && s.length > n ? s.substring(0, n - 1) + '…' : (s || '');
+
+  const nombre      = document.getElementById('nombre').value.trim();
+  const edad        = document.getElementById('edad').value.trim();
+  const pais        = document.getElementById('pais').value.trim();
+  const genero      = document.getElementById('genero').value;
+  const discord     = document.getElementById('discord').value.trim();
+  const idiomas     = [...selectedLangs].map(c => LANGUAGES.find(l=>l.code===c)?.name).filter(Boolean).join(', ') || '—';
+  const dispositivo = (document.querySelector('input[name="dispositivo"]:checked') || {}).value || '—';
+  const normas      = (document.querySelector('input[name="normas"]:checked') || {}).value || '—';
+  const progPlat    = (document.querySelector('input[name="prog-plat"]:checked') || {}).value || '—';
+  const nivel       = (document.querySelector('input[name="nivel"]:checked') || {}).value || '—';
+  const scriptsPC   = [...document.querySelectorAll('input[name="scripts-pc"]:checked')].map(e=>e.value).join(', ') || '—';
+  const scriptsMob  = [...document.querySelectorAll('input[name="scripts-mobile"]:checked')].map(e=>e.value).join(', ') || '—';
+  const luaPC       = document.getElementById('install-lua-pc').value.trim();
+  const luaMob      = document.getElementById('install-lua-mobile').value.trim();
+  const casoPC      = document.getElementById('caso-pc').value.trim();
+  const casoMobile  = document.getElementById('caso-mobile').value.trim();
+  const luaCode     = document.getElementById('lua-editor').value.trim();
+  const pres        = document.getElementById('presentacion').value.trim();
+  const disponib    = (document.querySelector('input[name="disponibilidad"]:checked') || {}).value || '—';
+  const baneado     = (document.querySelector('input[name="baneado"]:checked') || {}).value || '—';
+  const antiguedad  = (document.querySelector('input[name="antiguedad"]:checked') || {}).value || '—';
+  const aporte      = document.getElementById('aporte-comunidad')?.value.trim() || '—';
+  const conflicto   = document.getElementById('caso-conflicto')?.value.trim() || '—';
+  const motivacion  = document.getElementById('motivacion')?.value.trim() || '—';
+  const reaccionStf = (document.querySelector('input[name="reaccion-staff"]:checked') || {}).value || '—';
+  const blasthack   = document.getElementById('blasthack').value.trim();
+  const expProg     = document.getElementById('exp-programar').value.trim();
+  const expMoon     = document.getElementById('exp-moonloader').value.trim();
+  const expLua      = document.getElementById('exp-lua').value.trim();
+  const expBH       = document.getElementById('exp-blasthack-adv').value.trim();
+  const expIA       = document.getElementById('exp-ia').value.trim();
+  const now         = new Date().toLocaleString('es-AR', { timeZone: 'America/Argentina/Buenos_Aires' });
+
+  // Determinar si el código fue modificado respecto al ejemplo
+  const defaultCode = LUA_HELLO_WORLD.trim();
+  const codeModified = luaCode !== '' && luaCode !== defaultCode;
+
+  const payload = {
+    username: 'MST Community Staff Bot',
+    avatar_url: 'https://cdn.discordapp.com/embed/avatars/0.png',
+    embeds: [{
+      title: '📋 Nueva Postulación de Staff · MST Community',
+      description: 'Recibida el **' + now + '**',
+      color: 0xE8721A,
+      fields: [
+        { name: '👤 Datos personales', value: '**Nombre:** ' + nombre + '\n**Edad:** ' + edad + ' años\n**País:** ' + pais + '\n**Género:** ' + genero, inline: false },
+        { name: '🔷 Discord', value: '`' + discord + '`', inline: true },
+        { name: '🌐 Idiomas', value: idiomas, inline: true },
+        { name: '💻 Plataforma', value: dispositivo, inline: true },
+        { name: '📜 Conoce las normas', value: normas, inline: true },
+        { name: '⏱️ Disponibilidad semanal', value: disponib, inline: true },
+        { name: '📅 Antigüedad en el servidor', value: antiguedad, inline: true },
+        { name: '🚫 Historial de sanciones', value: baneado, inline: false },
+        { name: '🤝 Aporte al servidor', value: trunc(aporte, 900), inline: false },
+        { name: '🧠 Manejo de conflictos', value: trunc(conflicto, 900), inline: false },
+        { name: '💡 Motivación', value: trunc(motivacion, 900), inline: false },
+        { name: '⚖️ Ante abuso de staff', value: reaccionStf, inline: true },
+        { name: '🔧 Scripts que programa', value: progPlat, inline: true },
+        { name: '📊 Nivel técnico', value: nivel, inline: false },
+        { name: '🖥️ Scripts PC', value: scriptsPC, inline: true },
+        { name: '📱 Scripts Mobile', value: scriptsMob, inline: true },
+        { name: '📖 Instalar Lua en PC (MoonLoader)', value: trunc(luaPC, 900), inline: false },
+        { name: '📱 Instalar Lua en Mobile (MonetLoader)', value: trunc(luaMob, 900), inline: false },
+        { name: '🔍 Caso SA-MP PC', value: trunc(casoPC, 900), inline: false },
+        { name: '🔍 Caso MonetLoader Mobile', value: trunc(casoMobile, 900), inline: false },
+        { name: '📎 Código Lua', value: codeModified ? '✅ Adjunto como `codigo.lua`' : '—  (no se modificó el editor)', inline: false },
+        { name: '📝 Presentación', value: trunc(pres, 1024), inline: false },
+        ...(blasthack || expProg || expMoon || expLua || expBH || expIA ? [{ name: '━━ Sección Developers ━━', value: '\u200b', inline: false }] : []),
+        ...(blasthack ? [{ name: '❓ ¿Qué es BlastHack?', value: trunc(blasthack, 600), inline: false }] : []),
+        ...(expProg   ? [{ name: '💬 Sabe programar', value: expProg, inline: true }] : []),
+        ...(expMoon   ? [{ name: '🌙 Experiencia MoonLoader', value: trunc(expMoon, 400), inline: false }] : []),
+        ...(expLua    ? [{ name: '📜 Experiencia Lua', value: trunc(expLua, 400), inline: false }] : []),
+        ...(expBH     ? [{ name: '📚 Usa wiki BlastHack', value: expBH, inline: true }] : []),
+        ...(expIA     ? [{ name: '🤖 Programa con IA', value: expIA, inline: true }] : []),
+      ],
+      footer: { text: 'MST Community · niourozi · Scripts & Automation' },
+      timestamp: new Date().toISOString()
+    }]
+  };
+
+  try {
+    const WEBHOOK_URL = 'https://discord.com/api/webhooks/1502756656860238074/YwFtaudGAdKTPlPWkFW8jMIqSLgxAY5Vmo58RKWl16wbG76KaPGVLY3bQ1Lbc19kebT0';
+
+    const formData = new FormData();
+    formData.append('payload_json', JSON.stringify(payload));
+
+    // Adjuntar el código Lua como archivo solo si fue modificado
+    if (codeModified) {
+      const luaBlob = new Blob([luaCode], { type: 'text/plain' });
+      formData.append('files[0]', luaBlob, 'codigo.lua');
+    }
+
+    // No establecer Content-Type manualmente; el navegador lo hace automáticamente con el boundary
+    const res = await fetch(WEBHOOK_URL, {
+      method: 'POST',
+      body: formData
+    });
+
+    if (res.ok || res.status === 204) {
+      playSuccess();
+      document.getElementById('step-nav').style.display = 'none';
+      document.getElementById('panel-5').classList.remove('active');
+      document.getElementById('success-screen').style.display = 'block';
+      document.getElementById('progress-fill').style.width = '100%';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      throw new Error('HTTP ' + res.status);
+    }
+  } catch(err) {
+    btn.classList.remove('loading'); btn.disabled = false;
+    toast('Error al enviar. Verificá tu conexión e intentá de nuevo.');
+  }
+}
+
+/* Init */
+updateProgress(1);
+</script>
+</body>
+</html>
