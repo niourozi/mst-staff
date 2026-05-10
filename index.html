@@ -687,6 +687,13 @@
       .wrapper { padding: 92px .9rem 5rem; }
       .btn { padding: .6rem 1.2rem; font-size: .82rem; }
     }
+
+    /* ── FILTRO PLATAFORMA ── */
+    .plat-pc,
+    .plat-mob { transition: opacity .25s ease; }
+    .plat-hidden {
+      display: none !important;
+    }
   </style>
 </head>
 <body>
@@ -917,7 +924,7 @@
       </label>
       <p class="field-hint" style="margin-bottom:.65rem;">Marcá solo los que hayas usado realmente.</p>
 
-      <div class="platform-block">
+      <div class="platform-block plat-pc" id="scripts-block-pc">
         <div class="platform-title pc">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
           PC — SA-MP
@@ -930,7 +937,7 @@
         </div>
       </div>
 
-      <div class="platform-block">
+      <div class="platform-block plat-mob" id="scripts-block-mob">
         <div class="platform-title mob">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
           Mobile — SA-MP Android
@@ -992,24 +999,27 @@
     </div>
 
     <!-- INSTALAR LUA PC -->
+    <div id="campo-lua-pc" class="plat-pc">
     <div class="field" style="margin-bottom:1.3rem;">
       <label class="field-label" for="install-lua-pc">¿Cómo se instala un script Lua en PC con MoonLoader? Explicá paso a paso. <span class="req">*</span></label>
       <textarea id="install-lua-pc" style="min-height:130px;" placeholder="1. Descargá MoonLoader y sus librerías requeridas desde el sitio oficial...&#10;2. Copiá todos los archivos a la carpeta raíz del juego...&#10;3. Colocá el script .lua en la carpeta /moonloader/...&#10;4. Verificá que todos los archivos necesarios estén presentes para que funcione..."></textarea>
       <div class="char-count" id="cc-lua-pc">0 / 60 mín.</div>
     </div>
-
     <div class="divider"></div>
+    </div>
 
     <!-- INSTALAR LUA MOBILE -->
+    <div id="campo-lua-mob" class="plat-mob">
     <div class="field" style="margin-bottom:1.3rem;">
       <label class="field-label" for="install-lua-mobile">¿Cómo se instala un script Lua en Mobile (MonetLoader)? Rutas y pasos. <span class="req">*</span></label>
       <textarea id="install-lua-mobile" style="min-height:130px;" placeholder="1. Activá la opción MonetLoader Scripts desde la configuración del iniciador SA-MP...&#10;2. Descargá y extraé las librerías necesarias (lib.rar)...&#10;3. Pegá la carpeta lib en /storage/emulated/0/.../monetloader/...&#10;4. Colocá el script .lua en la carpeta monetloader...&#10;5. Entrá a cualquier servidor y verificá que el script cargue..."></textarea>
       <div class="char-count" id="cc-lua-mob">0 / 60 mín.</div>
     </div>
-
     <div class="divider"></div>
+    </div>
 
     <!-- CASO PC -->
+    <div id="campo-caso-pc" class="plat-pc">
     <div class="field" style="margin-bottom:1.3rem;">
       <label class="field-label" for="caso-pc">
         Caso PC: un usuario puso sus scripts en <code style="color:var(--blue);background:var(--blue-dim);padding:.05em .3em;border-radius:3px;font-family:var(--mono);">/moonloader/</code> pero no cargan. ¿Cómo lo ayudás? <span class="req">*</span>
@@ -1017,16 +1027,19 @@
       <textarea id="caso-pc" style="min-height:120px;" placeholder="1. Primero reviso moonloader.log para ver el error específico...&#10;2. Verifico si tiene los archivos necesarios para que funcione...&#10;3. Compruebo posibles conflictos con otros mods o plugins..."></textarea>
       <div class="char-count" id="cc-pc">0 / 60 mín.</div>
     </div>
-
     <div class="divider"></div>
+    </div>
 
-    <!-- CASO MOBILE (NUEVO) -->
+    <!-- CASO MOBILE -->
+    <div id="campo-caso-mob" class="plat-mob">
     <div class="field" style="margin-bottom:1.3rem;">
       <label class="field-label" for="caso-mobile">
         Caso Mobile: un usuario instaló sus scripts en MonetLoader pero no aparecen en el juego. ¿Cómo lo ayudás? <span class="req">*</span>
       </label>
       <textarea id="caso-mobile" style="min-height:120px;" placeholder="1. Verifico que tenga MonetLoader correctamente configurado en el launcher...&#10;2. Reviso que la carpeta lib esté en la ruta correcta...&#10;3. Compruebo que el script esté en /monetloader/ y no en una subcarpeta...&#10;4. Pregunto si el juego está actualizado y si MonetLoader es compatible con esa versión..."></textarea>
       <div class="char-count" id="cc-mob-case">0 / 60 mín.</div>
+    </div>
+    <div class="divider"></div>
     </div>
 
     <div class="divider"></div>
@@ -1864,22 +1877,26 @@ function validate(step) {
   }
 
   if (step === 3) {
+    const plat = (document.querySelector('input[name="dispositivo"]:checked') || {}).value || '';
+    const isPC  = plat === 'PC' || plat === 'PC + Mobile';
+    const isMob = plat === 'Mobile (Android)' || plat === 'PC + Mobile';
+
     const lp = document.getElementById('install-lua-pc');
     const lm = document.getElementById('install-lua-mobile');
     const cp = document.getElementById('caso-pc');
     const cm = document.getElementById('caso-mobile');
     [lp,lm,cp,cm].forEach(clearInvalid);
     let ok = true;
-    if (lp.value.trim().length < 30) { markInvalid(lp); ok=false; }
-    if (lm.value.trim().length < 30) { markInvalid(lm); ok=false; }
-    if (cp.value.trim().length < 30) { markInvalid(cp); ok=false; }
-    if (cm.value.trim().length < 30) { markInvalid(cm); ok=false; }
+    if (isPC  && lp.value.trim().length < 30) { markInvalid(lp); ok=false; }
+    if (isMob && lm.value.trim().length < 30) { markInvalid(lm); ok=false; }
+    if (isPC  && cp.value.trim().length < 30) { markInvalid(cp); ok=false; }
+    if (isMob && cm.value.trim().length < 30) { markInvalid(cm); ok=false; }
     if (!ok) { toast('Completá los campos técnicos con más detalle (mínimo 30 caracteres cada uno)'); return false; }
-    // Anti-gibberish en los campos técnicos
-    if (!checkGib('install-lua-pc',     'Instalar Lua PC'))     return false;
-    if (!checkGib('install-lua-mobile', 'Instalar Lua Mobile')) return false;
-    if (!checkGib('caso-pc',            'Caso PC'))             return false;
-    if (!checkGib('caso-mobile',        'Caso Mobile'))         return false;
+    // Anti-gibberish solo en campos visibles
+    if (isPC  && !checkGib('install-lua-pc',     'Instalar Lua PC'))     return false;
+    if (isMob && !checkGib('install-lua-mobile', 'Instalar Lua Mobile')) return false;
+    if (isPC  && !checkGib('caso-pc',            'Caso PC'))             return false;
+    if (isMob && !checkGib('caso-mobile',        'Caso Mobile'))         return false;
     return true;
   }
 
@@ -2352,6 +2369,67 @@ async function submitForm() {
     toast('Error al enviar. Verificá tu conexión e intentá de nuevo.');
   }
 }
+
+/* ═══════════════════════════════════════════
+   FILTRO DE PLATAFORMA
+   Muestra/oculta preguntas según PC / Mobile / Ambos
+═══════════════════════════════════════════ */
+function applyPlatformFilter(val) {
+  const isPC  = val === 'PC' || val === 'PC + Mobile';
+  const isMob = val === 'Mobile (Android)' || val === 'PC + Mobile';
+
+  // Paso 2 — bloques de scripts
+  const bPC  = document.getElementById('scripts-block-pc');
+  const bMob = document.getElementById('scripts-block-mob');
+  if (bPC)  bPC.classList.toggle('plat-hidden', !isPC);
+  if (bMob) bMob.classList.toggle('plat-hidden', !isMob);
+
+  // Paso 3 — campos técnicos
+  const ids = [
+    ['campo-lua-pc',   isPC],
+    ['campo-lua-mob',  isMob],
+    ['campo-caso-pc',  isPC],
+    ['campo-caso-mob', isMob],
+  ];
+  ids.forEach(([id, show]) => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.classList.toggle('plat-hidden', !show);
+      // Limpiar validación de campos ocultos para no bloquear el submit
+      el.querySelectorAll('textarea, input').forEach(f => {
+        if (!show) { f.classList.remove('invalid'); }
+      });
+    }
+  });
+
+  // Actualizar meta-tag del paso 3
+  const metaTag = document.querySelector('#panel-3 .meta-tag.blue');
+  if (metaTag) {
+    if (val === 'PC') metaTag.textContent = 'Solo PC';
+    else if (val === 'Mobile (Android)') metaTag.textContent = 'Solo Mobile';
+    else metaTag.textContent = 'PC + Mobile';
+  }
+}
+
+// Escuchar cambios en el radio de plataforma (paso 1)
+document.querySelectorAll('input[name="dispositivo"]').forEach(radio => {
+  radio.addEventListener('change', () => applyPlatformFilter(radio.value));
+});
+
+// Aplicar al cargar por si hay valor pre-seleccionado
+(function() {
+  const checked = document.querySelector('input[name="dispositivo"]:checked');
+  if (checked) applyPlatformFilter(checked.value);
+  // Si no hay nada seleccionado, ocultar todo hasta que elija
+  else {
+    ['scripts-block-pc','scripts-block-mob',
+     'campo-lua-pc','campo-lua-mob','campo-caso-pc','campo-caso-mob']
+    .forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.classList.add('plat-hidden');
+    });
+  }
+})();
 
 /* Init */
 updateProgress(1);
