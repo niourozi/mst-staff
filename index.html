@@ -683,6 +683,85 @@
     #devtools-warn h2 { font-size: 1.3rem; font-family: var(--display); font-weight: 800; color: var(--red); }
     #devtools-warn p  { font-size: .7rem; color: var(--text-2); max-width: 300px; line-height: 1.7; }
 
+
+    /* ── FIELD COUNTER ── */
+    .field-counter {
+      font-family: var(--mono); font-size: .58rem;
+      letter-spacing: .12em; color: var(--text-3);
+      margin-bottom: 1.4rem; display: flex; align-items: center; gap: .5rem;
+    }
+    .field-counter .fc-bar {
+      flex: 1; height: 2px; background: var(--border2); border-radius: 1px; overflow: hidden;
+    }
+    .field-counter .fc-fill {
+      height: 100%; background: var(--orange);
+      transition: width .4s cubic-bezier(0.4,0,0.2,1);
+      box-shadow: 0 0 6px var(--orange-glow);
+    }
+    .field-counter .fc-text { white-space: nowrap; color: var(--text-3); }
+    .field-counter.fc-done .fc-text { color: var(--green); }
+    .field-counter.fc-done .fc-fill { background: var(--green); }
+
+    /* ── CONFIRM MODAL ── */
+    #confirm-modal {
+      display: none; position: fixed; inset: 0; z-index: 9000;
+      background: rgba(5,7,11,0.82); backdrop-filter: blur(10px);
+      align-items: center; justify-content: center; padding: 1.5rem;
+    }
+    #confirm-modal.show { display: flex; }
+    .modal-box {
+      background: var(--card); border: 1px solid var(--border2);
+      border-radius: var(--radius); padding: 1.8rem 2rem;
+      max-width: 520px; width: 100%;
+      box-shadow: 0 20px 60px rgba(0,0,0,.7);
+      animation: panelIn .3s cubic-bezier(0.4,0,0.2,1) forwards;
+    }
+    .modal-title {
+      font-family: var(--display); font-size: 1.3rem; font-weight: 800;
+      color: var(--text); letter-spacing: .06em; text-transform: uppercase;
+      margin-bottom: .4rem;
+    }
+    .modal-sub {
+      font-family: var(--mono); font-size: .6rem; color: var(--text-3);
+      letter-spacing: .1em; margin-bottom: 1.4rem;
+    }
+    .modal-rows { display: flex; flex-direction: column; gap: .5rem; margin-bottom: 1.6rem; }
+    .modal-row {
+      display: flex; gap: .6rem; align-items: baseline;
+      font-size: .88rem; color: var(--text-2); line-height: 1.5;
+    }
+    .modal-row .mr-label {
+      font-family: var(--mono); font-size: .58rem; letter-spacing: .1em;
+      color: var(--text-3); white-space: nowrap; text-transform: uppercase;
+      min-width: 90px;
+    }
+    .modal-row .mr-val { color: var(--text); font-weight: 500; word-break: break-word; }
+    .modal-divider { height: 1px; background: var(--border); margin: .8rem 0; }
+    .modal-actions { display: flex; gap: .75rem; justify-content: flex-end; }
+
+    /* ── MONACO MOBILE ── */
+    @media(max-width:600px) {
+      #monaco-container {
+        height: 200px !important;
+      }
+      .code-editor-wrap { font-size: .8rem; }
+    }
+
+    /* ── CHAR COUNT starts amber ── */
+    .char-count { color: var(--amber); }
+    .char-count.ok { color: var(--green); }
+    .char-count.warn-count { color: var(--amber); }
+
+    /* ── SLIDE DIRECTION ── */
+    @keyframes panelInRight  { from{opacity:0;transform:translateX(28px)} to{opacity:1;transform:translateX(0)} }
+    @keyframes panelInLeft   { from{opacity:0;transform:translateX(-28px)} to{opacity:1;transform:translateX(0)} }
+    @keyframes panelOutRight { from{opacity:1;transform:translateX(0)} to{opacity:0;transform:translateX(-20px)} }
+    @keyframes panelOutLeft  { from{opacity:1;transform:translateX(0)} to{opacity:0;transform:translateX(20px)} }
+    .step-panel.active.dir-forward { animation: panelInRight .38s cubic-bezier(0.4,0,0.2,1) forwards; }
+    .step-panel.active.dir-back    { animation: panelInLeft  .38s cubic-bezier(0.4,0,0.2,1) forwards; }
+    .step-panel.exit.dir-forward   { animation: panelOutRight .26s cubic-bezier(0.4,0,0.2,1) forwards; }
+    .step-panel.exit.dir-back      { animation: panelOutLeft  .26s cubic-bezier(0.4,0,0.2,1) forwards; }
+
     @media(max-width:480px){
       .wrapper { padding: 92px .9rem 5rem; }
       .btn { padding: .6rem 1.2rem; font-size: .82rem; }
@@ -764,6 +843,7 @@
   ═══════════════════════════════ -->
   <div class="step-panel active" id="panel-1">
     <div class="section-tag">Paso 01 / 05</div>
+    <div id="field-counter-1" class="field-counter"></div>
     <h2 class="section-title">Tu <span class="accent">Identidad</span></h2>
 
     <div class="notice info">
@@ -780,7 +860,7 @@
       </div>
       <div class="field">
         <label class="field-label" for="edad">Edad <span class="req">*</span></label>
-        <input type="number" id="edad" placeholder="16" min="13" max="80">
+        <input type="number" id="edad" placeholder="20" min="15" max="50">
       </div>
     </div>
 
@@ -907,6 +987,7 @@
   ═══════════════════════════════ -->
   <div class="step-panel" id="panel-2">
     <div class="section-tag">Paso 02 / 05</div>
+    <div id="field-counter-2" class="field-counter"></div>
     <h2 class="section-title">Perfil <span class="accent">Técnico</span></h2>
 
     <div class="notice warn">
@@ -990,6 +1071,7 @@
   ═══════════════════════════════ -->
   <div class="step-panel" id="panel-3">
     <div class="section-tag">Paso 03 / 05</div>
+    <div id="field-counter-3" class="field-counter"></div>
     <h2 class="section-title">Casos <span class="accent">Técnicos</span></h2>
 
     <div class="meta-strip">
@@ -1071,6 +1153,7 @@
   ═══════════════════════════════ -->
   <div class="step-panel" id="panel-4">
     <div class="section-tag">Paso 04 / 05</div>
+    <div id="field-counter-4" class="field-counter"></div>
     <h2 class="section-title">Para <span class="accent">Developers</span></h2>
 
     <!-- NIVEL TÉCNICO — requerido aquí -->
@@ -1222,6 +1305,7 @@
   ═══════════════════════════════ -->
   <div class="step-panel" id="panel-5">
     <div class="section-tag">Paso 05 / 05</div>
+    <div id="field-counter-5" class="field-counter"></div>
     <h2 class="section-title">Tu <span class="accent">Presentación</span></h2>
 
     <div class="field" style="margin-bottom:1.4rem;">
@@ -1284,7 +1368,7 @@
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
         Atrás
       </button>
-      <button class="btn btn-success" id="submit-btn" onclick="submitForm()">
+      <button class="btn btn-success" id="submit-btn" onclick="openConfirmModal()">
         <span class="btn-text">
           Enviar Postulación
           <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
@@ -1351,6 +1435,24 @@
     </div>
   </footer>
 
+
+<!-- CONFIRM MODAL -->
+<div id="confirm-modal">
+  <div class="modal-box">
+    <div class="modal-title">Revisá tu postulación</div>
+    <div class="modal-sub">Confirmá que los datos son correctos antes de enviar</div>
+    <div class="modal-rows" id="modal-rows"></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal()">Volver a editar</button>
+      <button class="btn btn-success" id="modal-confirm-btn" onclick="confirmAndSend()">
+        <span class="btn-text">Enviar ahora
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        </span>
+        <span class="spinner"></span>
+      </button>
+    </div>
+  </div>
+</div>
 </div><!-- /wrapper -->
 
 <div id="toast">
@@ -1799,19 +1901,7 @@ function updateProgress(step) {
   });
 }
 
-function goToStep(from, to) {
-  const fe = document.getElementById('panel-' + from);
-  const te = document.getElementById('panel-' + to);
-  fe.classList.add('exit');
-  setTimeout(() => {
-    fe.classList.remove('active','exit');
-    te.classList.add('active');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, 260);
-  currentStep = to;
-  updateProgress(to);
-  playTransition();
-}
+// goToStep redefined below with slide direction support
 
 const DEV_PASS = 'T9!vQ#4xM@L7p$Z2^eR';
 function hasDevPass() {
@@ -1850,7 +1940,7 @@ function validate(step) {
     } else {
       document.getElementById('pais-tags-wrap').classList.remove('invalid-lp');
     }
-    if (e.value && (parseInt(e.value) < 13 || parseInt(e.value) > 80)) { markInvalid(e); ok=false; }
+    if (e.value && (parseInt(e.value) < 15 || parseInt(e.value) > 50)) { markInvalid(e); ok=false; }
     if (selectedLangs.size === 0) {
       langTagsWrap.classList.add('invalid-lp');
       ok = false;
@@ -2177,15 +2267,9 @@ document.querySelectorAll('input[type="radio"],input[type="checkbox"]').forEach(
 });
 
 /* ═══════════════════════════════════════════
-   ANTI-SPAM
+   ANTI-SPAM — moved to canSubmit() in features block below
 ═══════════════════════════════════════════ */
 let lastSubmit = 0;
-function canSubmit() {
-  const now = Date.now();
-  if (now - lastSubmit < 30000) return false;
-  lastSubmit = now;
-  return true;
-}
 
 /* ═══════════════════════════════════════════
    SUBMIT — envía código Lua como archivo adjunto
@@ -2431,8 +2515,239 @@ document.querySelectorAll('input[name="dispositivo"]').forEach(radio => {
   }
 })();
 
+/* ═══════════════════════════════════════════
+   FEATURE: Guardado de progreso con localStorage
+═══════════════════════════════════════════ */
+const LS_KEY = 'mst_draft_v1';
+
+function saveDraft() {
+  try {
+    const data = {};
+    document.querySelectorAll('input[type="text"],input[type="number"],textarea,select').forEach(el => {
+      if (el.id) data[el.id] = el.value;
+    });
+    document.querySelectorAll('input[type="radio"]:checked,input[type="checkbox"]:checked').forEach(el => {
+      data['_chk_' + el.name + '_' + el.value] = true;
+    });
+    data['_langs'] = [...selectedLangs];
+    data['_pais']  = selectedPais || null;
+    data['_paisName'] = document.getElementById('pais-search').value;
+    localStorage.setItem(LS_KEY, JSON.stringify(data));
+  } catch(e) {}
+}
+
+function loadDraft() {
+  try {
+    const raw = localStorage.getItem(LS_KEY);
+    if (!raw) return;
+    const data = JSON.parse(raw);
+    // Restore text/number/textarea/select
+    Object.keys(data).forEach(k => {
+      if (k.startsWith('_')) return;
+      const el = document.getElementById(k);
+      if (el) el.value = data[k];
+    });
+    // Restore radios & checkboxes
+    Object.keys(data).forEach(k => {
+      if (!k.startsWith('_chk_')) return;
+      const parts = k.slice(5).split('_');
+      const name  = parts[0];
+      const value = parts.slice(1).join('_');
+      const el = document.querySelector(`input[name="${name}"][value="${value}"]`);
+      if (el) { el.checked = true; el.dispatchEvent(new Event('change')); }
+    });
+    // Restore languages
+    if (Array.isArray(data._langs)) {
+      data._langs.forEach(c => selectedLangs.add(c));
+      renderLangTags();
+    }
+    // Restore país
+    if (data._pais && data._paisName) {
+      selectedPais = data._pais;
+      document.getElementById('pais-search').value = data._paisName;
+      document.getElementById('pais').value = data._pais;
+    }
+    // Trigger platform filter if dispositivo was saved
+    const disp = document.querySelector('input[name="dispositivo"]:checked');
+    if (disp) applyPlatformFilter(disp.value);
+    // Update char counters
+    ['install-lua-pc','install-lua-mobile','caso-pc','caso-mobile',
+     'blasthack','aporte-comunidad','caso-conflicto','motivacion','presentacion'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.dispatchEvent(new Event('input'));
+    });
+  } catch(e) {}
+}
+
+// Auto-save on any input change
+document.addEventListener('input',  saveDraft, { capture: true, passive: true });
+document.addEventListener('change', saveDraft, { capture: true, passive: true });
+
+/* ═══════════════════════════════════════════
+   FEATURE: Contador de campos por paso
+═══════════════════════════════════════════ */
+// Define required fields per step for the counter
+const STEP_FIELDS = {
+  1: [
+    () => !!document.getElementById('nombre')?.value.trim(),
+    () => !!document.getElementById('edad')?.value,
+    () => !!selectedPais,
+    () => !!document.getElementById('genero')?.value,
+    () => !!document.getElementById('discord')?.value.trim(),
+    () => selectedLangs.size > 0,
+    () => !!document.querySelector('input[name="dispositivo"]:checked'),
+    () => !!document.querySelector('input[name="normas"]:checked'),
+    () => !!document.querySelector('input[name="disponibilidad"]:checked'),
+    () => !!document.querySelector('input[name="baneado"]:checked'),
+    () => !!document.querySelector('input[name="antiguedad"]:checked'),
+  ],
+  2: [
+    () => {
+      const plat = (document.querySelector('input[name="dispositivo"]:checked')||{}).value||'';
+      const isPC = plat==='PC'||plat==='PC + Mobile';
+      const isMob = plat==='Mobile (Android)'||plat==='PC + Mobile';
+      const pcOk  = !isPC  || [...document.querySelectorAll('input[name="scripts-pc"]:checked')].length > 0;
+      const mobOk = !isMob || [...document.querySelectorAll('input[name="scripts-mobile"]:checked')].length > 0;
+      return pcOk && mobOk;
+    },
+    () => (document.getElementById('aporte-comunidad')?.value.trim().length||0) >= 60,
+  ],
+  3: [
+    () => {
+      const plat = (document.querySelector('input[name="dispositivo"]:checked')||{}).value||'';
+      const isPC = plat==='PC'||plat==='PC + Mobile';
+      return !isPC || (document.getElementById('install-lua-pc')?.value.trim().length||0) >= 30;
+    },
+    () => {
+      const plat = (document.querySelector('input[name="dispositivo"]:checked')||{}).value||'';
+      const isMob = plat==='Mobile (Android)'||plat==='PC + Mobile';
+      return !isMob || (document.getElementById('install-lua-mobile')?.value.trim().length||0) >= 30;
+    },
+    () => {
+      const plat = (document.querySelector('input[name="dispositivo"]:checked')||{}).value||'';
+      const isPC = plat==='PC'||plat==='PC + Mobile';
+      return !isPC || (document.getElementById('caso-pc')?.value.trim().length||0) >= 30;
+    },
+    () => {
+      const plat = (document.querySelector('input[name="dispositivo"]:checked')||{}).value||'';
+      const isMob = plat==='Mobile (Android)'||plat==='PC + Mobile';
+      return !isMob || (document.getElementById('caso-mobile')?.value.trim().length||0) >= 30;
+    },
+    () => (document.getElementById('caso-conflicto')?.value.trim().length||0) >= 10,
+  ],
+  4: [
+    () => !!document.querySelector('input[name="nivel"]:checked'),
+  ],
+  5: [
+    () => (document.getElementById('presentacion')?.value.trim().length||0) >= 100,
+    () => (document.getElementById('motivacion')?.value.trim().length||0) >= 60,
+    () => !!document.querySelector('input[name="reaccion-staff"]:checked'),
+    () => !!document.getElementById('reglas-check')?.checked,
+    () => !!document.getElementById('terminos')?.checked,
+  ],
+};
+
+function updateFieldCounter(step) {
+  const el = document.getElementById('field-counter-' + step);
+  if (!el) return;
+  const checks = STEP_FIELDS[step] || [];
+  if (checks.length === 0) { el.style.display = 'none'; return; }
+  const done  = checks.filter(fn => { try { return fn(); } catch(e){ return false; } }).length;
+  const total = checks.length;
+  const pct   = Math.round(done / total * 100);
+  el.className = 'field-counter' + (done === total ? ' fc-done' : '');
+  el.innerHTML = `<div class="fc-bar"><div class="fc-fill" style="width:${pct}%"></div></div><span class="fc-text">${done} / ${total} completados</span>`;
+}
+
+function updateAllCounters() {
+  for (let s = 1; s <= 5; s++) updateFieldCounter(s);
+}
+
+// Hook counter updates into existing events
+document.addEventListener('input',  updateAllCounters, { capture: true, passive: true });
+document.addEventListener('change', updateAllCounters, { capture: true, passive: true });
+
+/* ═══════════════════════════════════════════
+   FEATURE: Dirección de animación en transición de pasos
+═══════════════════════════════════════════ */
+function goToStep(from, to) {
+  const fe = document.getElementById('panel-' + from);
+  const te = document.getElementById('panel-' + to);
+  const dir = to > from ? 'forward' : 'back';
+  fe.classList.add('exit', 'dir-' + dir);
+  te.classList.remove('dir-forward','dir-back');
+  setTimeout(() => {
+    fe.classList.remove('active','exit','dir-forward','dir-back');
+    te.classList.add('active', 'dir-' + dir);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setTimeout(() => te.classList.remove('dir-forward','dir-back'), 400);
+  }, 260);
+  currentStep = to;
+  updateProgress(to);
+  playTransition();
+}
+
+/* ═══════════════════════════════════════════
+   FEATURE: Modal de confirmación antes de enviar
+═══════════════════════════════════════════ */
+function openConfirmModal() {
+  if (!hasDevPass() && !validate(5)) return;
+  if (!canSubmit()) { toast('Esperá unos segundos antes de intentar de nuevo'); return; }
+
+  const plat = (document.querySelector('input[name="dispositivo"]:checked')||{}).value||'—';
+  const isPC  = plat==='PC'||plat==='PC + Mobile';
+  const isMob = plat==='Mobile (Android)'||plat==='PC + Mobile';
+
+  const rows = [
+    ['Nombre',      document.getElementById('nombre')?.value.trim()],
+    ['Edad',        document.getElementById('edad')?.value + ' años'],
+    ['Discord',     document.getElementById('discord')?.value.trim()],
+    ['País',        document.getElementById('pais-search')?.value.trim()],
+    ['Plataforma',  plat],
+    ['Disponib.',   (document.querySelector('input[name="disponibilidad"]:checked')||{}).value||'—'],
+    ['Nivel',       (document.querySelector('input[name="nivel"]:checked')||{}).value||'—'],
+  ];
+
+  const container = document.getElementById('modal-rows');
+  container.innerHTML = rows.map(([label, val]) => `
+    <div class="modal-row">
+      <span class="mr-label">${label}</span>
+      <span class="mr-val">${val || '—'}</span>
+    </div>`).join('') + '<div class="modal-divider"></div>'
+    + `<div class="modal-row"><span class="mr-label">Presentación</span><span class="mr-val" style="font-size:.82rem;color:var(--text-2);">${(document.getElementById('presentacion')?.value.trim()||'—').substring(0,120)}${(document.getElementById('presentacion')?.value.trim()||'').length > 120 ? '…' : ''}</span></div>`;
+
+  document.getElementById('confirm-modal').classList.add('show');
+  lastSubmit = 0; // reset so confirmAndSend can proceed
+}
+
+function closeModal() {
+  document.getElementById('confirm-modal').classList.remove('show');
+  lastSubmit = 0;
+}
+
+async function confirmAndSend() {
+  document.getElementById('confirm-modal').classList.remove('show');
+  await submitForm();
+}
+
+/* ═══════════════════════════════════════════
+   FEATURE: Rate limit por fingerprint simple (idea 8)
+   Almacena timestamp en localStorage para persistir entre recargas
+═══════════════════════════════════════════ */
+function canSubmit() {
+  const now = Date.now();
+  let last = 0;
+  try { last = parseInt(localStorage.getItem('mst_last_submit') || '0'); } catch(e) {}
+  if (now - last < 30000) return false;
+  try { localStorage.setItem('mst_last_submit', String(now)); } catch(e) {}
+  lastSubmit = now;
+  return true;
+}
+
 /* Init */
 updateProgress(1);
+loadDraft();
+updateAllCounters();
 </script>
 </body>
 </html>
