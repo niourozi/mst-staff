@@ -683,15 +683,6 @@
     #devtools-warn h2 { font-size: 1.3rem; font-family: var(--display); font-weight: 800; color: var(--red); }
     #devtools-warn p  { font-size: .7rem; color: var(--text-2); max-width: 300px; line-height: 1.7; }
 
-    /* ── ERROR LOG PANEL ── */
-    #mst-errlog::-webkit-scrollbar { width: 3px; }
-    #mst-errlog::-webkit-scrollbar-thumb { background: #1a2030; border-radius: 2px; }
-    #mst-errlog::-webkit-scrollbar-track { background: transparent; }
-
-    @media(max-width:480px){
-      #mst-errlog { width: calc(100vw - 24px); right: 12px; }
-    }
-
     @media(max-width:480px){
       .wrapper { padding: 92px .9rem 5rem; }
       .btn { padding: .6rem 1.2rem; font-size: .82rem; }
@@ -1393,128 +1384,6 @@
   }, 800);
 })();
 
-/* ═══════════════════════════════════════════
-   MINI ERROR LOG — panel en pantalla + auto-copy
-═══════════════════════════════════════════ */
-(function() {
-  const errors = [];
-  let copyTimer = null;
-
-  // Crear panel
-  const panel = document.createElement('div');
-  panel.id = 'mst-errlog';
-  Object.assign(panel.style, {
-    position:'fixed', bottom:'70px', right:'12px', zIndex:'99997',
-    width:'300px', maxHeight:'180px', overflowY:'auto',
-    background:'#090c12', border:'1px solid #f85149',
-    borderRadius:'6px', fontFamily:"'JetBrains Mono',monospace",
-    fontSize:'10px', color:'#f85149', display:'none',
-    boxShadow:'0 4px 24px rgba(248,81,73,0.25)',
-    backdropFilter:'blur(8px)'
-  });
-  panel.innerHTML = `
-    <div style="display:flex;align-items:center;justify-content:space-between;
-      padding:5px 10px;border-bottom:1px solid #1a2030;background:#0e1219;
-      font-size:9px;letter-spacing:.12em;text-transform:uppercase;position:sticky;top:0;">
-      <span style="color:#f85149;">⚠ ERROR LOG</span>
-      <div style="display:flex;gap:6px;align-items:center;">
-        <span id="mst-errlog-copy" style="cursor:pointer;color:#4fa3e8;letter-spacing:.08em;"
-          title="Copiar al portapapeles">📋 copiar</span>
-        <span id="mst-errlog-close" style="cursor:pointer;color:#3d4a5e;font-size:12px;line-height:1;"
-          title="Cerrar">×</span>
-      </div>
-    </div>
-    <div id="mst-errlog-body" style="padding:6px 10px;"></div>`;
-  document.body.appendChild(panel);
-
-  function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-
-  function addEntry(type, msg, src, line) {
-    const t = new Date().toLocaleTimeString('es-AR',{hour12:false});
-    const txt = `[${t}] [${type}] ${String(msg)}${src?' @ '+src+(line?':'+line:''):''}`;
-    errors.push(txt);
-
-    const row = document.createElement('div');
-    row.style.cssText = 'margin-bottom:4px;padding-bottom:4px;border-bottom:1px solid #1a2030;word-break:break-all;line-height:1.55;';
-    const typeColor = type==='WARN'?'#e3b341':type==='PROMISE'?'#c9922a':'#f85149';
-    row.innerHTML = `<span style="color:#3d4a5e;">[${t}]</span> `
-      +`<span style="color:${typeColor};font-weight:700;">[${type}]</span> `
-      +`<span style="color:#dde5f0;">${esc(String(msg))}</span>`
-      +(src?`<br><span style="color:#3d4a5e;font-size:9px;">${esc(src)}${line?':'+line:''}</span>`:'');
-    document.getElementById('mst-errlog-body').appendChild(row);
-
-    panel.style.display = 'block';
-    panel.scrollTop = panel.scrollHeight;
-
-    // Auto-copy con debounce (espera 300ms por si vienen varios juntos)
-    clearTimeout(copyTimer);
-    copyTimer = setTimeout(() => autoCopy(), 300);
-  }
-
-  function autoCopy() {
-    const text = errors.join('\n');
-    if (!text) return;
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(text).catch(() => fallbackCopy(text));
-    } else { fallbackCopy(text); }
-  }
-
-  function fallbackCopy(text) {
-    const ta = document.createElement('textarea');
-    ta.value = text;
-    Object.assign(ta.style,{position:'fixed',opacity:'0',top:'0',left:'0'});
-    document.body.appendChild(ta);
-    ta.focus(); ta.select();
-    try { document.execCommand('copy'); } catch(e) {}
-    document.body.removeChild(ta);
-  }
-
-  document.getElementById('mst-errlog-copy').addEventListener('click', () => {
-    autoCopy();
-    const btn = document.getElementById('mst-errlog-copy');
-    btn.textContent = '✅ copiado'; 
-    setTimeout(() => { btn.textContent = '📋 copiar'; }, 1500);
-  });
-  document.getElementById('mst-errlog-close').addEventListener('click', () => {
-    panel.style.display = 'none';
-  });
-
-  // Capturar window.onerror
-  const prevOnError = window.onerror;
-  window.onerror = function(msg, src, line, col, err) {
-    addEntry('ERROR', err ? (err.message||msg) : msg, src ? src.split('/').pop() : '', line);
-    if (prevOnError) prevOnError.apply(this, arguments);
-    return false;
-  };
-
-  // Capturar errores de recursos (script, img, etc.)
-  window.addEventListener('error', function(e) {
-    if (e.target && e.target !== window) {
-      const tag = e.target.tagName || 'RESOURCE';
-      const url = e.target.src || e.target.href || '';
-      addEntry('RES', `${tag} no cargó: ${url.split('/').pop()||url}`, '', '');
-    }
-  }, true);
-
-  // Capturar promesas rechazadas
-  window.addEventListener('unhandledrejection', function(e) {
-    const reason = e.reason;
-    const msg = reason instanceof Error ? reason.message : String(reason);
-    addEntry('PROMISE', msg);
-  });
-
-  // Interceptar console.error y console.warn
-  const origError = console.error.bind(console);
-  console.error = function(...args) {
-    addEntry('CON.ERR', args.map(a => typeof a==='object'?JSON.stringify(a):a).join(' '));
-    origError(...args);
-  };
-  const origWarn = console.warn.bind(console);
-  console.warn = function(...args) {
-    addEntry('WARN', args.map(a => typeof a==='object'?JSON.stringify(a):a).join(' '));
-    origWarn(...args);
-  };
-})();
 
 /* ═══════════════════════════════════════════
    AUDIO — fetch+Blob para forzar MIME type correcto.
@@ -2303,7 +2172,7 @@ function canSubmit() {
 }
 
 /* ═══════════════════════════════════════════
-   SUBMIT — envía código Lua como archivo adjunto
+   SUBMIT — envía postulacion.txt + codigo.lua (opcional)
 ═══════════════════════════════════════════ */
 async function submitForm() {
   if (!hasDevPass() && !validate(5)) return;
@@ -2317,86 +2186,138 @@ async function submitForm() {
   const btn = document.getElementById('submit-btn');
   btn.classList.add('loading'); btn.disabled = true;
 
-  const trunc = (s, n) => s && s.length > n ? s.substring(0, n - 1) + '…' : (s || '');
+  const v = id => (document.getElementById(id)?.value || '').trim();
+  const r = name => (document.querySelector('input[name="' + name + '"]:checked') || {}).value || '—';
+  const cb = name => [...document.querySelectorAll('input[name="' + name + '"]:checked')].map(e=>e.value).join(', ') || '—';
 
-  const nombre      = document.getElementById('nombre').value.trim();
-  const edad        = document.getElementById('edad').value.trim();
-  const pais        = document.getElementById('pais').value.trim();
+  const nombre      = v('nombre');
+  const edad        = v('edad');
+  const pais        = v('pais');
   const genero      = document.getElementById('genero').value;
-  const discord     = document.getElementById('discord').value.trim();
+  const discord     = v('discord');
   const idiomas     = [...selectedLangs].map(c => LANGUAGES.find(l=>l.code===c)?.name).filter(Boolean).join(', ') || '—';
-  const dispositivo = (document.querySelector('input[name="dispositivo"]:checked') || {}).value || '—';
-  const normas      = (document.querySelector('input[name="normas"]:checked') || {}).value || '—';
-  const progPlat    = (document.querySelector('input[name="prog-plat"]:checked') || {}).value || '—';
-  const nivel       = (document.querySelector('input[name="nivel"]:checked') || {}).value || '—';
-  const scriptsPC   = [...document.querySelectorAll('input[name="scripts-pc"]:checked')].map(e=>e.value).join(', ') || '—';
-  const scriptsMob  = [...document.querySelectorAll('input[name="scripts-mobile"]:checked')].map(e=>e.value).join(', ') || '—';
-  const luaPC       = document.getElementById('install-lua-pc').value.trim();
-  const luaMob      = document.getElementById('install-lua-mobile').value.trim();
-  const casoPC      = document.getElementById('caso-pc').value.trim();
-  const casoMobile  = document.getElementById('caso-mobile').value.trim();
-  const luaCode     = document.getElementById('lua-editor').value.trim();
-  const pres        = document.getElementById('presentacion').value.trim();
-  const disponib    = (document.querySelector('input[name="disponibilidad"]:checked') || {}).value || '—';
-  const baneado     = (document.querySelector('input[name="baneado"]:checked') || {}).value || '—';
-  const antiguedad  = (document.querySelector('input[name="antiguedad"]:checked') || {}).value || '—';
-  const aporte      = document.getElementById('aporte-comunidad')?.value.trim() || '—';
-  const conflicto   = document.getElementById('caso-conflicto')?.value.trim() || '—';
-  const motivacion  = document.getElementById('motivacion')?.value.trim() || '—';
-  const reaccionStf = (document.querySelector('input[name="reaccion-staff"]:checked') || {}).value || '—';
-  const blasthack   = document.getElementById('blasthack').value.trim();
-  const expProg     = document.getElementById('exp-programar').value.trim();
-  const expMoon     = document.getElementById('exp-moonloader').value.trim();
-  const expLua      = document.getElementById('exp-lua').value.trim();
-  const expBH       = document.getElementById('exp-blasthack-adv').value.trim();
-  const expIA       = document.getElementById('exp-ia').value.trim();
+  const dispositivo = r('dispositivo');
+  const normas      = r('normas');
+  const disponib    = r('disponibilidad');
+  const antiguedad  = r('antiguedad');
+  const baneado     = r('baneado');
+  const aporte      = v('aporte-comunidad') || '—';
+  const conflicto   = v('caso-conflicto') || '—';
+  const reaccionStf = r('reaccion-staff');
+  const progPlat    = r('prog-plat');
+  const nivel       = r('nivel');
+  const scriptsPC   = cb('scripts-pc');
+  const scriptsMob  = cb('scripts-mobile');
+  const luaPC       = v('install-lua-pc');
+  const luaMob      = v('install-lua-mobile');
+  const casoPC      = v('caso-pc');
+  const casoMobile  = v('caso-mobile');
+  const luaCode     = v('lua-editor');
+  const pres        = v('presentacion');
+  const motivacion  = v('motivacion') || '—';
+  const reaccionStf2 = r('reaccion-staff');
+  const blasthack   = v('blasthack');
+  const expProg     = v('exp-programar');
+  const expMoon     = v('exp-moonloader');
+  const expLua      = v('exp-lua');
+  const expBH       = v('exp-blasthack-adv');
+  const expIA       = v('exp-ia');
   const now         = new Date().toLocaleString('es-AR', { timeZone: 'America/Argentina/Buenos_Aires' });
 
-  // Determinar si el código fue modificado respecto al ejemplo
   const defaultCode = LUA_HELLO_WORLD.trim();
   const codeModified = luaCode !== '' && luaCode !== defaultCode;
+
+  // ── Armar postulacion.txt ──────────────────────────────
+  const SEP  = '═'.repeat(60);
+  const sep2 = '─'.repeat(60);
+
+  const txt = [
+    SEP,
+    '  MST COMMUNITY — POSTULACION DE STAFF',
+    '  Fecha: ' + now,
+    SEP,
+    '',
+    '[ SECCION 1 — IDENTIDAD ]',
+    sep2,
+    'Nombre completo : ' + nombre,
+    'Edad            : ' + edad,
+    'Pais            : ' + pais,
+    'Genero          : ' + genero,
+    'Discord         : ' + discord,
+    'Idiomas         : ' + idiomas,
+    '',
+    '[ SECCION 2 — COMUNIDAD ]',
+    sep2,
+    'Plataforma      : ' + dispositivo,
+    'Conoce normas   : ' + normas,
+    'Disponibilidad  : ' + disponib,
+    'Antiguedad      : ' + antiguedad,
+    'Historial bans  : ' + baneado,
+    '',
+    'Aporte al servidor:',
+    aporte,
+    '',
+    '[ SECCION 3 — CASOS ]',
+    sep2,
+    'Scripts que programa : ' + progPlat,
+    'Scripts PC           : ' + scriptsPC,
+    'Scripts Mobile       : ' + scriptsMob,
+    '',
+    'Como instalar Lua en PC (MoonLoader):',
+    luaPC || '—',
+    '',
+    'Como instalar Lua en Mobile (MonetLoader):',
+    luaMob || '—',
+    '',
+    'Caso SA-MP PC:',
+    casoPC || '—',
+    '',
+    'Caso MonetLoader Mobile:',
+    casoMobile || '—',
+    '',
+    'Manejo de conflictos:',
+    conflicto,
+    '',
+    '[ SECCION 4 — DEVELOPERS ]',
+    sep2,
+    'Nivel tecnico : ' + nivel,
+    'Codigo Lua    : ' + (codeModified ? 'Adjunto como codigo.lua' : 'No modificado'),
+    '',
+    'Que es BlastHack:',
+    blasthack || '—',
+    '',
+    'Sabe programar / lenguajes:',
+    expProg || '—',
+    '',
+    'Experiencia MoonLoader:',
+    expMoon || '—',
+    '',
+    'Experiencia Lua:',
+    expLua || '—',
+    '',
+    'Usa wiki BlastHack : ' + (expBH || '—'),
+    'Programa con IA    : ' + (expIA || '—'),
+    '',
+    '[ SECCION 5 — FINAL ]',
+    sep2,
+    'Reaccion ante abuso de staff : ' + reaccionStf,
+    '',
+    'Motivacion:',
+    motivacion,
+    '',
+    'Presentacion:',
+    pres,
+    '',
+    SEP,
+    '  MST Community · niourozi · Scripts & Automation',
+    SEP,
+  ].join('
+');
 
   const payload = {
     username: 'MST Community Staff Bot',
     avatar_url: 'https://cdn.discordapp.com/embed/avatars/0.png',
-    embeds: [{
-      title: '📋 Nueva Postulación de Staff · MST Community',
-      description: 'Recibida el **' + now + '**',
-      color: 0xE8721A,
-      fields: [
-        { name: '👤 Datos personales', value: '**Nombre:** ' + nombre + '\n**Edad:** ' + edad + ' años\n**País:** ' + pais + '\n**Género:** ' + genero, inline: false },
-        { name: '🔷 Discord', value: '`' + discord + '`', inline: true },
-        { name: '🌐 Idiomas', value: idiomas, inline: true },
-        { name: '💻 Plataforma', value: dispositivo, inline: true },
-        { name: '📜 Conoce las normas', value: normas, inline: true },
-        { name: '⏱️ Disponibilidad semanal', value: disponib, inline: true },
-        { name: '📅 Antigüedad en el servidor', value: antiguedad, inline: true },
-        { name: '🚫 Historial de sanciones', value: baneado, inline: false },
-        { name: '🤝 Aporte al servidor', value: trunc(aporte, 900), inline: false },
-        { name: '🧠 Manejo de conflictos', value: trunc(conflicto, 900), inline: false },
-        { name: '💡 Motivación', value: trunc(motivacion, 900), inline: false },
-        { name: '⚖️ Ante abuso de staff', value: reaccionStf, inline: true },
-        { name: '🔧 Scripts que programa', value: progPlat, inline: true },
-        { name: '📊 Nivel técnico', value: nivel, inline: false },
-        { name: '🖥️ Scripts PC', value: scriptsPC, inline: true },
-        { name: '📱 Scripts Mobile', value: scriptsMob, inline: true },
-        { name: '📖 Instalar Lua en PC (MoonLoader)', value: trunc(luaPC, 900), inline: false },
-        { name: '📱 Instalar Lua en Mobile (MonetLoader)', value: trunc(luaMob, 900), inline: false },
-        { name: '🔍 Caso SA-MP PC', value: trunc(casoPC, 900), inline: false },
-        { name: '🔍 Caso MonetLoader Mobile', value: trunc(casoMobile, 900), inline: false },
-        { name: '📎 Código Lua', value: codeModified ? '✅ Adjunto como `codigo.lua`' : '—  (no se modificó el editor)', inline: false },
-        { name: '📝 Presentación', value: trunc(pres, 1024), inline: false },
-        ...(blasthack || expProg || expMoon || expLua || expBH || expIA ? [{ name: '━━ Sección Developers ━━', value: '\u200b', inline: false }] : []),
-        ...(blasthack ? [{ name: '❓ ¿Qué es BlastHack?', value: trunc(blasthack, 600), inline: false }] : []),
-        ...(expProg   ? [{ name: '💬 Sabe programar', value: expProg, inline: true }] : []),
-        ...(expMoon   ? [{ name: '🌙 Experiencia MoonLoader', value: trunc(expMoon, 400), inline: false }] : []),
-        ...(expLua    ? [{ name: '📜 Experiencia Lua', value: trunc(expLua, 400), inline: false }] : []),
-        ...(expBH     ? [{ name: '📚 Usa wiki BlastHack', value: expBH, inline: true }] : []),
-        ...(expIA     ? [{ name: '🤖 Programa con IA', value: expIA, inline: true }] : []),
-      ],
-      footer: { text: 'MST Community · niourozi · Scripts & Automation' },
-      timestamp: new Date().toISOString()
-    }]
+    content: '📋 **Nueva Postulación de Staff** · ' + nombre + ' (`' + discord + '`) · ' + now,
   };
 
   try {
@@ -2405,13 +2326,16 @@ async function submitForm() {
     const formData = new FormData();
     formData.append('payload_json', JSON.stringify(payload));
 
-    // Adjuntar el código Lua como archivo solo si fue modificado
+    // Adjuntar postulacion.txt siempre
+    const txtBlob = new Blob([txt], { type: 'text/plain' });
+    formData.append('files[0]', txtBlob, 'postulacion.txt');
+
+    // Adjuntar codigo.lua solo si fue modificado
     if (codeModified) {
       const luaBlob = new Blob([luaCode], { type: 'text/plain' });
-      formData.append('files[0]', luaBlob, 'codigo.lua');
+      formData.append('files[1]', luaBlob, 'codigo.lua');
     }
 
-    // No establecer Content-Type manualmente; el navegador lo hace automáticamente con el boundary
     const res = await fetch(WEBHOOK_URL, {
       method: 'POST',
       body: formData
@@ -2432,7 +2356,6 @@ async function submitForm() {
     toast('Error al enviar. Verificá tu conexión e intentá de nuevo.');
   }
 }
-
 /* Init */
 updateProgress(1);
 </script>
