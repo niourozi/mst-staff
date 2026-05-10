@@ -1384,7 +1384,6 @@
   }, 800);
 })();
 
-
 /* ═══════════════════════════════════════════
    AUDIO — fetch+Blob para forzar MIME type correcto.
    raw.githubusercontent.com sirve los archivos como
@@ -2172,7 +2171,7 @@ function canSubmit() {
 }
 
 /* ═══════════════════════════════════════════
-   SUBMIT — envía postulacion.txt + codigo.lua (opcional)
+   SUBMIT — envía código Lua como archivo adjunto
 ═══════════════════════════════════════════ */
 async function submitForm() {
   if (!hasDevPass() && !validate(5)) return;
@@ -2186,51 +2185,48 @@ async function submitForm() {
   const btn = document.getElementById('submit-btn');
   btn.classList.add('loading'); btn.disabled = true;
 
-  const v = id => (document.getElementById(id)?.value || '').trim();
-  const r = name => (document.querySelector('input[name="' + name + '"]:checked') || {}).value || '—';
-  const cb = name => [...document.querySelectorAll('input[name="' + name + '"]:checked')].map(e=>e.value).join(', ') || '—';
+  const trunc = (s, n) => s && s.length > n ? s.substring(0, n - 1) + '…' : (s || '');
 
-  const nombre      = v('nombre');
-  const edad        = v('edad');
-  const pais        = v('pais');
+  const nombre      = document.getElementById('nombre').value.trim();
+  const edad        = document.getElementById('edad').value.trim();
+  const pais        = document.getElementById('pais').value.trim();
   const genero      = document.getElementById('genero').value;
-  const discord     = v('discord');
+  const discord     = document.getElementById('discord').value.trim();
   const idiomas     = [...selectedLangs].map(c => LANGUAGES.find(l=>l.code===c)?.name).filter(Boolean).join(', ') || '—';
-  const dispositivo = r('dispositivo');
-  const normas      = r('normas');
-  const disponib    = r('disponibilidad');
-  const antiguedad  = r('antiguedad');
-  const baneado     = r('baneado');
-  const aporte      = v('aporte-comunidad') || '—';
-  const conflicto   = v('caso-conflicto') || '—';
-  const reaccionStf = r('reaccion-staff');
-  const progPlat    = r('prog-plat');
-  const nivel       = r('nivel');
-  const scriptsPC   = cb('scripts-pc');
-  const scriptsMob  = cb('scripts-mobile');
-  const luaPC       = v('install-lua-pc');
-  const luaMob      = v('install-lua-mobile');
-  const casoPC      = v('caso-pc');
-  const casoMobile  = v('caso-mobile');
-  const luaCode     = v('lua-editor');
-  const pres        = v('presentacion');
-  const motivacion  = v('motivacion') || '—';
-  const reaccionStf2 = r('reaccion-staff');
-  const blasthack   = v('blasthack');
-  const expProg     = v('exp-programar');
-  const expMoon     = v('exp-moonloader');
-  const expLua      = v('exp-lua');
-  const expBH       = v('exp-blasthack-adv');
-  const expIA       = v('exp-ia');
+  const dispositivo = (document.querySelector('input[name="dispositivo"]:checked') || {}).value || '—';
+  const normas      = (document.querySelector('input[name="normas"]:checked') || {}).value || '—';
+  const progPlat    = (document.querySelector('input[name="prog-plat"]:checked') || {}).value || '—';
+  const nivel       = (document.querySelector('input[name="nivel"]:checked') || {}).value || '—';
+  const scriptsPC   = [...document.querySelectorAll('input[name="scripts-pc"]:checked')].map(e=>e.value).join(', ') || '—';
+  const scriptsMob  = [...document.querySelectorAll('input[name="scripts-mobile"]:checked')].map(e=>e.value).join(', ') || '—';
+  const luaPC       = document.getElementById('install-lua-pc').value.trim();
+  const luaMob      = document.getElementById('install-lua-mobile').value.trim();
+  const casoPC      = document.getElementById('caso-pc').value.trim();
+  const casoMobile  = document.getElementById('caso-mobile').value.trim();
+  const luaCode     = document.getElementById('lua-editor').value.trim();
+  const pres        = document.getElementById('presentacion').value.trim();
+  const disponib    = (document.querySelector('input[name="disponibilidad"]:checked') || {}).value || '—';
+  const baneado     = (document.querySelector('input[name="baneado"]:checked') || {}).value || '—';
+  const antiguedad  = (document.querySelector('input[name="antiguedad"]:checked') || {}).value || '—';
+  const aporte      = document.getElementById('aporte-comunidad')?.value.trim() || '—';
+  const conflicto   = document.getElementById('caso-conflicto')?.value.trim() || '—';
+  const motivacion  = document.getElementById('motivacion')?.value.trim() || '—';
+  const reaccionStf = (document.querySelector('input[name="reaccion-staff"]:checked') || {}).value || '—';
+  const blasthack   = document.getElementById('blasthack').value.trim();
+  const expProg     = document.getElementById('exp-programar').value.trim();
+  const expMoon     = document.getElementById('exp-moonloader').value.trim();
+  const expLua      = document.getElementById('exp-lua').value.trim();
+  const expBH       = document.getElementById('exp-blasthack-adv').value.trim();
+  const expIA       = document.getElementById('exp-ia').value.trim();
   const now         = new Date().toLocaleString('es-AR', { timeZone: 'America/Argentina/Buenos_Aires' });
 
+  // Determinar si el código fue modificado respecto al ejemplo
   const defaultCode = LUA_HELLO_WORLD.trim();
   const codeModified = luaCode !== '' && luaCode !== defaultCode;
 
   // ── Armar postulacion.txt ──────────────────────────────
   const SEP  = '═'.repeat(60);
   const sep2 = '─'.repeat(60);
-
   const txt = [
     SEP,
     '  MST COMMUNITY — POSTULACION DE STAFF',
@@ -2311,8 +2307,7 @@ async function submitForm() {
     SEP,
     '  MST Community · niourozi · Scripts & Automation',
     SEP,
-  ].join('
-');
+  ].join('\n');
 
   const payload = {
     username: 'MST Community Staff Bot',
@@ -2336,6 +2331,7 @@ async function submitForm() {
       formData.append('files[1]', luaBlob, 'codigo.lua');
     }
 
+    // No establecer Content-Type manualmente; el navegador lo hace automáticamente con el boundary
     const res = await fetch(WEBHOOK_URL, {
       method: 'POST',
       body: formData
@@ -2356,6 +2352,7 @@ async function submitForm() {
     toast('Error al enviar. Verificá tu conexión e intentá de nuevo.');
   }
 }
+
 /* Init */
 updateProgress(1);
 </script>
