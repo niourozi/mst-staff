@@ -863,10 +863,54 @@
       opacity: .35; z-index: 50; pointer-events: none;
     }
   </style>
+
+  <!-- DATE RESTRICTION: 11 may – 25 may 2025 -->
+  <style>
+    #closed-screen {
+      display: none; position: fixed; inset: 0; z-index: 99999;
+      background: var(--bg);
+      align-items: center; justify-content: center; flex-direction: column;
+      text-align: center; padding: 2rem; gap: 1.2rem;
+      font-family: var(--body);
+    }
+    #closed-screen.show { display: flex; }
+    .closed-icon {
+      width: 72px; height: 72px; margin: 0 auto;
+      background: var(--red-dim); border: 1px solid rgba(248,81,73,0.3);
+      border-radius: 18px; display: flex; align-items: center; justify-content: center;
+    }
+    .closed-icon svg { width: 32px; height: 32px; color: var(--red); }
+    .closed-title {
+      font-family: var(--display); font-size: 2rem; font-weight: 800;
+      color: var(--text); letter-spacing: .06em; text-transform: uppercase;
+    }
+    .closed-sub {
+      font-family: var(--mono); font-size: .72rem; color: var(--text-2);
+      letter-spacing: .1em; line-height: 1.8; max-width: 380px;
+    }
+    .closed-dates {
+      display: inline-flex; align-items: center; gap: .6rem;
+      font-family: var(--mono); font-size: .65rem; color: var(--orange);
+      background: var(--orange-dim); border: 1px solid rgba(232,114,26,0.22);
+      border-radius: 6px; padding: .5rem 1.1rem; letter-spacing: .14em;
+    }
+  </style>
 </head>
 <body>
 
 <div class="scanlines"></div>
+
+<!-- CLOSED SCREEN -->
+<div id="closed-screen">
+  <div class="closed-icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+  </div>
+  <div class="closed-title">Postulaciones Cerradas</div>
+  <div class="closed-sub">El período de postulaciones para Staff de MST Community ha finalizado.</div>
+  <div class="closed-dates">11 MAY — 25 MAY 2026</div>
+  <div class="closed-sub" style="margin-top:.4rem;font-size:.62rem;color:var(--text-3);">Seguí al tanto en nuestro Discord para futuras convocatorias.</div>
+</div>
+
 
 <div id="devtools-warn">
   <h2>Acceso Restringido</h2>
@@ -2852,6 +2896,23 @@ function jumpToStep(to) {
 function canSubmit() {
   return true;
 }
+
+
+/* ═══════════════════════════════════════════
+   DATE RESTRICTION: 11 may – 25 may 2025
+═══════════════════════════════════════════ */
+(function checkApplicationPeriod() {
+  const now   = new Date();
+  const open  = new Date('2026-05-11T00:00:00');
+  const close = new Date('2026-05-26T00:00:00'); // exclusive: after May 25
+  if (now < open || now >= close) {
+    document.getElementById('closed-screen').classList.add('show');
+    // Hide the rest of the UI
+    document.querySelector('.wrapper').style.display = 'none';
+    document.querySelector('.topbar').style.visibility = 'hidden';
+    document.querySelector('.progress-rail').style.display = 'none';
+  }
+})();
 
 /* Init */
 updateProgress(1);
