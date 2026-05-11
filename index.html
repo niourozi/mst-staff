@@ -1,10 +1,5 @@
 <!DOCTYPE html>
-<!--
-  MST Community — Staff Application v2
-  Licencia MST Community · ver pie de página
-  discord.gg/mst-community-1257189867020881962
-  Creador: niourozi · discord.com/users/1210282337850630217
--->
+
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -15,21 +10,21 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Barlow:wght@300;400;500;600;700;800&family=Barlow+Condensed:wght@600;700;800&display=swap" rel="stylesheet">
 
-  <!-- Monaco Editor CDN -->
+  
   <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs/loader.js"></script>
 
-  <!-- Gibberish Detector — github.com/gtomitsuka/gibberish-detector.js (MIT) -->
+  
   <script src="https://gtomitsuka.github.io/gibberish-detector.js/gibberish.min.js"
           onerror="console.warn('[Gibberish] CDN no disponible, usando heurísticas locales')"></script>
 
-  <!-- localForage — IndexedDB/WebSQL/localStorage wrapper (MIT) -->
+  
   <script src="https://cdnjs.cloudflare.com/ajax/libs/localforage/1.10.0/localforage.min.js"></script>
 
-  <!-- ThumbmarkJS — browser fingerprinting sin servidor (MIT) -->
+  
   <script src="https://cdn.jsdelivr.net/npm/@thumbmarkjs/thumbmarkjs@0.14.4/dist/thumbmark.umd.js"
           onerror="console.warn('[Thumbmark] CDN no disponible')"></script>
 
-  <!-- animate.css — micro animaciones CSS (MIT) -->
+  
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
 
   <style>
@@ -100,7 +95,7 @@
       );
     }
 
-    /* ── TOPBAR ── */
+    
     .topbar {
       position: fixed; top: 0; left: 0; right: 0; z-index: 100;
       height: 54px;
@@ -151,7 +146,7 @@
       color: var(--text-3); letter-spacing: .16em; text-transform: uppercase;
     }
 
-    /* ── PROGRESS ── */
+    
     .progress-rail {
       position: fixed; top: 54px; left: 0; right: 0; z-index: 99;
       height: 2px; background: var(--border);
@@ -163,14 +158,14 @@
       box-shadow: 0 0 10px var(--orange-glow);
     }
 
-    /* ── LAYOUT ── */
+    
     .wrapper {
       position: relative; z-index: 1;
       max-width: 700px; margin: 0 auto;
       padding: 100px 1.2rem 6rem;
     }
 
-    /* ── HEADER ── */
+    
     header { margin-bottom: 2.8rem; }
 
     .header-eyebrow {
@@ -206,7 +201,7 @@
     }
     .header-desc strong { color: var(--blue); font-weight: 500; }
 
-    /* ── STEP NAV ── */
+    
     .step-nav { display: flex; align-items: center; margin-bottom: 2.2rem; }
     .step-item {
       display: flex; align-items: center; gap: .5rem;
@@ -241,14 +236,14 @@
     .step-label { display: none; }
     @media(min-width:520px){ .step-label { display: inline; } }
 
-    /* ── PANELS ── */
+    
     .step-panel { display: none; opacity: 0; }
     .step-panel.active { display: block; animation: panelIn .38s cubic-bezier(0.4,0,0.2,1) forwards; }
     .step-panel.exit   { animation: panelOut .26s cubic-bezier(0.4,0,0.2,1) forwards; }
     @keyframes panelIn  { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
     @keyframes panelOut { from{opacity:1;transform:translateY(0)} to{opacity:0;transform:translateY(-14px)} }
 
-    /* ── SECTION LABELS ── */
+    
     .section-tag {
       font-family: var(--mono); font-size: .58rem;
       letter-spacing: .22em; text-transform: uppercase;
@@ -262,7 +257,7 @@
     }
     .section-title .accent { color: var(--orange); }
 
-    /* ── NOTICE ── */
+    
     .notice {
       display: flex; gap: .8rem; align-items: flex-start;
       padding: .9rem 1rem; border-radius: var(--radius-sm);
@@ -274,7 +269,7 @@
     .notice.info { background: var(--blue-dim); border: 1px solid rgba(79,163,232,0.18); color: var(--blue); }
     .notice.warn { background: rgba(227,179,65,0.07); border: 1px solid rgba(227,179,65,0.2); color: var(--amber); }
 
-    /* ── FIELDS ── */
+    
     .field-grid { display: grid; gap: 1.1rem; grid-template-columns: 1fr; }
     .field-grid.two { grid-template-columns: 1fr 1fr; }
     @media(max-width:500px){ .field-grid.two { grid-template-columns: 1fr; } }
@@ -337,7 +332,7 @@
 
     .divider { height: 1px; background: var(--border); margin: 1.6rem 0; }
 
-    /* ── OPTION PILLS ── */
+    
     .option-grid { display: flex; flex-wrap: wrap; gap: .5rem; }
     .opt-item { position: relative; }
     .opt-item input { position: absolute; opacity: 0; width: 0; height: 0; }
@@ -364,7 +359,7 @@
     }
     .opt-item input:checked ~ .opt-body .opt-check::after { opacity: 1; }
 
-    /* ── TAG CHECKBOXES ── */
+    
     .tag-check { position: relative; }
     .tag-check input { position: absolute; opacity: 0; width: 0; height: 0; }
     .tag-body {
@@ -378,7 +373,7 @@
     .tag-body:hover { color: var(--text); border-color: var(--border2); }
     .tag-check input:checked ~ .tag-body { border-color: var(--orange); background: var(--orange-dim); color: var(--text); }
 
-    /* ── LANGUAGE PICKER ── */
+    
     .lang-picker { position: relative; }
     .lang-tags-wrap {
       min-height: 44px; padding: .38rem .55rem;
@@ -447,7 +442,7 @@
       color: var(--text-3); letter-spacing: .08em;
     }
 
-    /* ── LEVEL CARDS ── */
+    
     .level-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: .75rem; }
     @media(max-width:500px){ .level-grid { grid-template-columns: 1fr; } }
     .level-card { position: relative; cursor: pointer; }
@@ -479,7 +474,7 @@
     }
     .level-card input:checked ~ .level-body .level-desc { color: var(--text-2); }
 
-    /* ── PLATFORM BLOCKS ── */
+    
     .platform-block {
       background: var(--surface); border: 1px solid var(--border);
       border-radius: var(--radius-sm); padding: .9rem 1rem; margin-bottom: .65rem;
@@ -494,7 +489,7 @@
     .platform-title.pc  { color: var(--blue); }
     .platform-title.mob { color: var(--green); }
 
-    /* ── CHECKBOX ITEMS ── */
+    
     .chk-item { cursor: pointer; display: block; }
     .chk-item input { position: absolute; opacity: 0; width: 0; height: 0; }
     .chk-body {
@@ -517,7 +512,7 @@
     .chk-text { font-size: .9rem; color: var(--text-2); line-height: 1.6; transition: color var(--transition); }
     .chk-item input:checked ~ .chk-body .chk-text { color: var(--text); }
 
-    /* ── CODE EDITOR ── */
+    
     .code-editor-wrap { border: 1px solid var(--border2); border-radius: var(--radius); overflow: hidden; }
     .code-editor-bar {
       display: flex; align-items: center; gap: .65rem;
@@ -558,7 +553,7 @@
     #monaco-container { height: 280px; width: 100%; }
     #lua-editor { display: none; }
 
-    /* ── RULES BOX ── */
+    
     .rules-box {
       background: var(--card); border: 1px solid var(--border2);
       border-radius: var(--radius); padding: 1rem 1.2rem;
@@ -580,7 +575,7 @@
       white-space: nowrap; margin-top: 2px; flex-shrink: 0;
     }
 
-    /* ── META STRIP ── */
+    
     .meta-strip { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: 1.4rem; }
     .meta-tag {
       font-family: var(--mono); font-size: .57rem;
@@ -591,7 +586,7 @@
     .meta-tag.orange { color: var(--orange); border-color: rgba(232,114,26,.2); background: var(--orange-dim); }
     .meta-tag.blue   { color: var(--blue);   border-color: rgba(79,163,232,.2);  background: var(--blue-dim); }
 
-    /* ── BUTTONS ── */
+    
     .btn-row {
       display: flex; gap: .75rem; justify-content: flex-end;
       margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--border);
@@ -621,7 +616,7 @@
     .btn-success.loading .btn-text { display: none; }
     .btn-success.loading .spinner  { display: inline-block; }
 
-    /* ── DEVELOPER SECTION ── */
+    
     .dev-header {
       display: flex; align-items: center; gap: .75rem; margin-bottom: 1.5rem;
     }
@@ -637,7 +632,7 @@
       color: var(--text-2); letter-spacing: .08em; text-transform: uppercase;
     }
 
-    /* ── SUCCESS ── */
+    
     #success-screen {
       display: none; text-align: center; padding: 4rem 1rem;
       animation: panelIn .5s cubic-bezier(0.4,0,0.2,1) forwards;
@@ -666,7 +661,7 @@
     .success-link:hover { color: var(--text); }
     .success-link svg { width: 14px; height: 14px; }
 
-    /* ── TOAST ── */
+    
     #toast {
       position: fixed; bottom: 1.5rem; left: 50%;
       transform: translateX(-50%) translateY(100px);
@@ -682,7 +677,7 @@
     #toast.show { transform: translateX(-50%) translateY(0); }
     #toast svg { width: 13px; height: 13px; flex-shrink: 0; }
 
-    /* ── LICENSE ── */
+    
     .license-box {
       background: var(--surface); border: 1px solid var(--border);
       border-radius: var(--radius); padding: 1.1rem 1.3rem; margin-top: 2.5rem;
@@ -694,7 +689,7 @@
     .license-box p { font-family: var(--mono); font-size: .57rem; color: var(--text-3); line-height: 1.85; letter-spacing: .04em; }
     .license-box a { color: var(--blue); text-decoration: none; }
 
-    /* ── FOOTER ── */
+    
     footer {
       text-align: center; margin-top: 1.8rem;
       font-family: var(--mono); font-size: .57rem;
@@ -703,7 +698,7 @@
     footer a { color: var(--text-3); text-decoration: none; transition: color var(--transition); }
     footer a:hover { color: var(--orange); }
 
-    /* ── DEVTOOLS ── */
+    
     #devtools-warn {
       display: none; position: fixed; inset: 0; z-index: 99999;
       background: var(--bg); align-items: center; justify-content: center;
@@ -713,8 +708,7 @@
     #devtools-warn h2 { font-size: 1.3rem; font-family: var(--display); font-weight: 800; color: var(--red); }
     #devtools-warn p  { font-size: .7rem; color: var(--text-2); max-width: 300px; line-height: 1.7; }
 
-
-    /* ── FIELD COUNTER ── */
+    
     .field-counter {
       font-family: var(--mono); font-size: .58rem;
       letter-spacing: .12em; color: var(--text-3);
@@ -732,7 +726,7 @@
     .field-counter.fc-done .fc-text { color: var(--green); }
     .field-counter.fc-done .fc-fill { background: var(--green); }
 
-    /* ── CONFIRM MODAL ── */
+    
     #confirm-modal {
       display: none; position: fixed; inset: 0; z-index: 9000;
       background: rgba(5,7,11,0.82); backdrop-filter: blur(10px);
@@ -769,7 +763,7 @@
     .modal-divider { height: 1px; background: var(--border); margin: .8rem 0; }
     .modal-actions { display: flex; gap: .75rem; justify-content: flex-end; }
 
-    /* ── MONACO MOBILE ── */
+    
     @media(max-width:600px) {
       #monaco-container {
         height: 200px !important;
@@ -777,12 +771,12 @@
       .code-editor-wrap { font-size: .8rem; }
     }
 
-    /* ── CHAR COUNT starts amber ── */
+    
     .char-count { color: var(--amber); }
     .char-count.ok { color: var(--green); }
     .char-count.warn-count { color: var(--amber); }
 
-    /* ── SLIDE DIRECTION ── */
+    
     @keyframes panelInRight  { from{opacity:0;transform:translateX(28px)} to{opacity:1;transform:translateX(0)} }
     @keyframes panelInLeft   { from{opacity:0;transform:translateX(-28px)} to{opacity:1;transform:translateX(0)} }
     @keyframes panelOutRight { from{opacity:1;transform:translateX(0)} to{opacity:0;transform:translateX(-20px)} }
@@ -797,14 +791,14 @@
       .btn { padding: .6rem 1.2rem; font-size: .82rem; }
     }
 
-    /* ── FILTRO PLATAFORMA ── */
+    
     .plat-pc,
     .plat-mob { transition: opacity .25s ease; }
     .plat-hidden {
       display: none !important;
     }
 
-    /* ── AUTOSAVE INDICATOR ── */
+    
     #autosave-indicator {
       display: flex; align-items: center; gap: .4rem;
       font-family: var(--mono); font-size: .56rem;
@@ -818,7 +812,7 @@
     @keyframes saveSpin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
     #autosave-indicator.saving svg { animation: saveSpin .8s linear infinite; }
 
-    /* ── REAL-TIME VALIDATION FEEDBACK ── */
+    
     .field-error-msg {
       font-family: var(--mono); font-size: .55rem;
       color: var(--red); letter-spacing: .06em;
@@ -830,7 +824,7 @@
       box-shadow: 0 0 0 3px var(--green-dim) !important;
     }
 
-    /* ── CHAR MIN REACHED ANIMATION ── */
+    
     @keyframes charMinReached {
       0%   { box-shadow: 0 0 0 3px rgba(63,185,80,0); }
       30%  { box-shadow: 0 0 0 6px rgba(63,185,80,0.35); }
@@ -843,7 +837,7 @@
     }
     .char-count.animate__flash { animation-duration: 0.5s; }
 
-    /* ── APPLICATION ID DISPLAY ── */
+    
     .app-id-badge {
       display: inline-flex; align-items: center; gap: .5rem;
       font-family: var(--mono); font-size: .62rem;
@@ -855,7 +849,7 @@
     }
     .app-id-badge .id-label { color: var(--text-3); font-size: .52rem; letter-spacing: .12em; }
 
-    /* ── FINGERPRINT BADGE ── */
+    
     #fp-badge {
       font-family: var(--mono); font-size: .48rem;
       color: var(--text-3); letter-spacing: .08em;
@@ -864,7 +858,7 @@
     }
   </style>
 
-  <!-- DATE RESTRICTION: 11 may – 25 may 2025 -->
+  
   <style>
     #closed-screen {
       display: none; position: fixed; inset: 0; z-index: 99999;
@@ -900,7 +894,6 @@
 
 <div class="scanlines"></div>
 
-<!-- CLOSED SCREEN -->
 <div id="closed-screen">
   <div class="closed-icon">
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
@@ -911,13 +904,11 @@
   <div class="closed-sub" style="margin-top:.4rem;font-size:.62rem;color:var(--text-3);">Seguí al tanto en nuestro Discord para futuras convocatorias.</div>
 </div>
 
-
 <div id="devtools-warn">
   <h2>Acceso Restringido</h2>
   <p>Cerrá las herramientas de desarrollo para continuar con la postulación.</p>
 </div>
 
-<!-- TOPBAR -->
 <header class="topbar">
   <div class="topbar-logo">
     <div class="logo-badge"><img src="https://cdn.discordapp.com/icons/1257189867020881962/5033f0b4a8a0ff381beed66a35c6e9aa.png?size=2048" alt="MST"></div>
@@ -925,14 +916,13 @@
   </div>
   <div class="topbar-sep"></div>
   <span class="topbar-slug">Staff Application</span>
-  <!-- #13 — AUTOSAVE INDICATOR -->
+  
   <div id="autosave-indicator" aria-live="polite" aria-label="Estado del borrador">
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-.02-8.48"/></svg>
     <span id="autosave-text">Borrador</span>
   </div>
 </header>
 
-<!-- #8 — FINGERPRINT BADGE (subtle, bottom-right) -->
 <div id="fp-badge"></div>
 
 <div class="progress-rail"><div class="progress-fill" id="progress-fill"></div></div>
@@ -951,7 +941,7 @@
     </p>
   </header>
 
-  <!-- STEP NAV — 5 pasos -->
+  
   <nav class="step-nav" id="step-nav">
     <div class="step-item active" data-step="1">
       <div class="step-dot" onclick="jumpToStep(1)" style="cursor:pointer;" title="Ir al paso 1">01</div>
@@ -979,9 +969,7 @@
     </div>
   </nav>
 
-  <!-- ═══════════════════════════════
-       STEP 1 — IDENTIDAD
-  ═══════════════════════════════ -->
+  
   <div class="step-panel active" id="panel-1">
     <div id="field-counter-1" class="field-counter"></div>
     <h2 class="section-title">Tu <span class="accent">Identidad</span></h2>
@@ -1026,7 +1014,7 @@
       </div>
     </div>
 
-    <!-- DISCORD -->
+    
     <div class="field-grid" style="margin-bottom:1.1rem;">
       <div class="field">
         <label class="field-label" for="discord">Discord — usuario o ID <span class="req">*</span></label>
@@ -1035,7 +1023,7 @@
       </div>
     </div>
 
-    <!-- IDIOMAS -->
+    
     <div class="field-grid" style="margin-bottom:1.1rem;">
       <div class="field">
         <label class="field-label">Idiomas que hablás <span class="req">*</span></label>
@@ -1049,7 +1037,7 @@
       </div>
     </div>
 
-    <!-- DISPOSITIVO -->
+    
     <div class="field-grid" style="margin-bottom:1.1rem;">
       <div class="field">
         <label class="field-label" id="lbl-dispositivo">Plataforma que usás <span class="req">*</span></label>
@@ -1061,7 +1049,7 @@
       </div>
     </div>
 
-    <!-- NORMAS -->
+    
     <div class="field-grid">
       <div class="field">
         <label class="field-label" id="lbl-normas">¿Conocés las normas del servidor? <span class="req">*</span></label>
@@ -1075,7 +1063,7 @@
 
     <div class="divider"></div>
 
-    <!-- DISPONIBILIDAD -->
+    
     <div class="field-grid" style="margin-bottom:1.1rem;">
       <div class="field">
         <label class="field-label" id="lbl-disponibilidad">¿Cuántas horas por semana podés dedicarle al servidor? <span class="req">*</span></label>
@@ -1088,7 +1076,7 @@
       </div>
     </div>
 
-    <!-- HISTORIAL -->
+    
     <div class="field-grid" style="margin-bottom:1.1rem;">
       <div class="field">
         <label class="field-label" id="lbl-baneado">¿Alguna vez fuiste baneado o sancionado en MST Community u otro servidor de SA-MP? <span class="req">*</span></label>
@@ -1101,7 +1089,7 @@
       </div>
     </div>
 
-    <!-- ACTIVIDAD EN EL SERVIDOR -->
+    
     <div class="field-grid" style="margin-bottom:1.1rem;">
       <div class="field">
         <label class="field-label" id="lbl-antiguedad">¿Hace cuánto tiempo sos miembro activo del servidor de Discord? <span class="req">*</span></label>
@@ -1122,9 +1110,7 @@
     </div>
   </div>
 
-  <!-- ═══════════════════════════════
-       STEP 2 — TÉCNICO
-  ═══════════════════════════════ -->
+  
   <div class="step-panel" id="panel-2">
     <div id="field-counter-2" class="field-counter"></div>
     <h2 class="section-title">Perfil <span class="accent">Técnico</span></h2>
@@ -1136,7 +1122,7 @@
       <span>MST Community se enfoca en scripts y automatización SA-MP. Si tu experiencia es solo en skins o mapas, este rol probablemente no es para vos.</span>
     </div>
 
-    <!-- SCRIPTS — requerido -->
+    
     <div class="field" style="margin-bottom:1.4rem;">
       <label class="field-label">
         <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
@@ -1172,7 +1158,7 @@
 
     <div class="divider"></div>
 
-    <!-- APORTE A LA COMUNIDAD -->
+    
     <div class="field" style="margin-bottom:1.3rem;">
       <label class="field-label" for="aporte-comunidad">¿De qué forma concreta pensás aportar al servidor siendo parte del staff? <span class="req">*</span></label>
       <textarea id="aporte-comunidad" style="min-height:100px;" placeholder="Ej: respondiendo dudas técnicas en los canales de ayuda, testeando scripts antes de publicarlos, ayudando a nuevos miembros con la instalación..."></textarea>
@@ -1181,7 +1167,7 @@
 
     <div class="divider"></div>
 
-    <!-- ¿PROGRAMÁS SCRIPTS PROPIOS? -->
+    
     <div class="field">
       <label class="field-label">¿Programás scripts propios? <span class="opt">OPCIONAL</span></label>
       <p class="field-hint" style="margin-bottom:.65rem;">Marcá en qué plataforma desarrollás. Si solo usás scripts de otros, marcá la última opción.</p>
@@ -1205,9 +1191,7 @@
     </div>
   </div>
 
-  <!-- ═══════════════════════════════
-       STEP 3 — CASOS TÉCNICOS
-  ═══════════════════════════════ -->
+  
   <div class="step-panel" id="panel-3">
     <div id="field-counter-3" class="field-counter"></div>
     <h2 class="section-title">Casos <span class="accent">Técnicos</span></h2>
@@ -1218,7 +1202,7 @@
       <span class="meta-tag">MoonLoader / MonetLoader</span>
     </div>
 
-    <!-- INSTALAR LUA PC -->
+    
     <div id="campo-lua-pc" class="plat-pc">
     <div class="field" style="margin-bottom:1.3rem;">
       <label class="field-label" for="install-lua-pc">¿Cómo se instala un script Lua en PC con MoonLoader? Explicá paso a paso. <span class="req">*</span></label>
@@ -1228,7 +1212,7 @@
     <div class="divider"></div>
     </div>
 
-    <!-- INSTALAR LUA MOBILE -->
+    
     <div id="campo-lua-mob" class="plat-mob">
     <div class="field" style="margin-bottom:1.3rem;">
       <label class="field-label" for="install-lua-mobile">¿Cómo se instala un script Lua en Mobile (MonetLoader)? Rutas y pasos. <span class="req">*</span></label>
@@ -1238,7 +1222,7 @@
     <div class="divider"></div>
     </div>
 
-    <!-- CASO PC -->
+    
     <div id="campo-caso-pc" class="plat-pc">
     <div class="field" style="margin-bottom:1.3rem;">
       <label class="field-label" for="caso-pc">
@@ -1250,7 +1234,7 @@
     <div class="divider"></div>
     </div>
 
-    <!-- CASO MOBILE -->
+    
     <div id="campo-caso-mob" class="plat-mob">
     <div class="field" style="margin-bottom:1.3rem;">
       <label class="field-label" for="caso-mobile">
@@ -1264,7 +1248,7 @@
 
     <div class="divider"></div>
 
-    <!-- CASO CONFLICT -->
+    
     <div class="field" style="margin-bottom:1.3rem;">
       <label class="field-label" for="caso-conflicto">
         Caso general: un usuario se queja agresivamente en el canal de ayuda porque nadie le responde. ¿Cómo manejás la situación? <span class="req">*</span>
@@ -1286,14 +1270,12 @@
     </div>
   </div>
 
-  <!-- ═══════════════════════════════
-       STEP 4 — DEVELOPERS
-  ═══════════════════════════════ -->
+  
   <div class="step-panel" id="panel-4">
     <div id="field-counter-4" class="field-counter"></div>
     <h2 class="section-title">Para <span class="accent">Developers</span></h2>
 
-    <!-- NIVEL TÉCNICO — requerido aquí -->
+    
     <div class="field" style="margin-bottom:1.8rem;">
       <label class="field-label">Tu nivel técnico <span class="req">*</span></label>
       <div class="level-grid">
@@ -1332,7 +1314,7 @@
 
     <div class="divider"></div>
 
-    <!-- EDITOR DE CÓDIGO LUA -->
+    
     <div class="field" style="margin-bottom:1.5rem;">
       <label class="field-label">
         <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
@@ -1366,7 +1348,7 @@
 
     <div class="divider"></div>
 
-    <!-- SECCIÓN OPCIONAL PARA EXPERIMENTADOS -->
+    
     <div class="dev-header">
       <span class="dev-badge">Todo Opcional</span>
       <span class="dev-title">Preguntas para Experimentados</span>
@@ -1379,7 +1361,7 @@
       <span>Si sos desarrollador o tenés experiencia avanzada, respondé lo que puedas. Si no, podés pasar directamente.</span>
     </div>
 
-    <!-- BLASTHACK -->
+    
     <div class="field" style="margin-bottom:1.2rem;">
       <label class="field-label" for="blasthack">¿Qué es BlastHack? Explicá brevemente. <span class="opt">OPCIONAL</span></label>
       <textarea id="blasthack" placeholder="BlastHack es el foro/comunidad donde..." style="min-height:90px;"></textarea>
@@ -1416,7 +1398,7 @@
       </div>
     </div>
 
-    <!-- NUEVA PREGUNTA: IA -->
+    
     <div class="field-grid">
       <div class="field">
         <label class="field-label" for="exp-ia">¿Programás con IA? ¿Cuál? <span class="opt">OPCIONAL</span></label>
@@ -1437,9 +1419,7 @@
     </div>
   </div>
 
-  <!-- ═══════════════════════════════
-       STEP 5 — FINAL
-  ═══════════════════════════════ -->
+  
   <div class="step-panel" id="panel-5">
     <div id="field-counter-5" class="field-counter"></div>
     <h2 class="section-title">Tu <span class="accent">Presentación</span></h2>
@@ -1471,7 +1451,7 @@
 
     <div class="divider"></div>
 
-    <!-- NORMAS -->
+    
     <div class="section-tag" style="margin-bottom:.7rem;">Normas del servidor</div>
     <div class="rules-box">
       <div class="rule-item"><span class="rule-num">RN1</span><span>Queda prohibido pedir, promocionar o mencionar otros servidores de Discord similares en cualquier canal.</span></div>
@@ -1514,7 +1494,7 @@
     </div>
   </div>
 
-  <!-- SUCCESS SCREEN -->
+  
   <div id="success-screen">
     <div class="success-icon-wrap">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
@@ -1547,7 +1527,7 @@
     </a>
   </div>
 
-  <!-- LICENSE -->
+  
   <div class="license-box">
     <h3>MST Community License</h3>
     <p>
@@ -1571,8 +1551,6 @@
     </div>
   </footer>
 
-
-<!-- CONFIRM MODAL -->
 <div id="confirm-modal">
   <div class="modal-box">
     <div class="modal-title">Revisá tu postulación</div>
@@ -1589,20 +1567,17 @@
     </div>
   </div>
 </div>
-</div><!-- /wrapper -->
+</div>
 
 <div id="toast">
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
   <span id="toast-msg">—</span>
 </div>
 
-<!-- AUDIO: src se asigna vía fetch+Blob para forzar MIME type correcto -->
 <audio id="bg-music" loop preload="auto"></audio>
 
 <script>
-/* ═══════════════════════════════════════════
-   PROTECTION
-═══════════════════════════════════════════ */
+
 (function() {
   document.addEventListener('contextmenu', e => e.preventDefault());
   document.addEventListener('keydown', function(e) {
@@ -1635,12 +1610,6 @@
   }, 800);
 })();
 
-/* ═══════════════════════════════════════════
-   AUDIO — fetch+Blob para forzar MIME type correcto.
-   raw.githubusercontent.com sirve los archivos como
-   application/octet-stream; el <audio> los rechaza.
-   Al crear un Blob con 'audio/mpeg' el navegador lo acepta.
-═══════════════════════════════════════════ */
 (function() {
   const AUDIO_URL = 'https://raw.githubusercontent.com/niourozi/niourozi.github.io/refs/heads/(root)/Welcome%20To%20Los%20Santos.mp3';
   const music = document.getElementById('bg-music');
@@ -1651,12 +1620,12 @@
 
   function doPlay() {
     music.play().catch(err => {
-      // Solo loguear si no es la política de autoplay (NotAllowedError)
+      
       if (err.name !== 'NotAllowedError') console.warn('[Audio]', err.message);
     });
   }
 
-  // Descargar el MP3 como ArrayBuffer y crear un Blob con MIME correcto
+  
   fetch(AUDIO_URL)
     .then(function(res) {
       if (!res.ok) throw new Error('HTTP ' + res.status);
@@ -1671,18 +1640,18 @@
     })
     .catch(function(err) {
       console.warn('[Audio] Fetch falló, usando src directo:', err.message);
-      // Fallback: asignar src directamente y esperar que el navegador lo acepte
+      
       music.src = AUDIO_URL;
       music.load();
       ready = true;
       if (wantsPlay) doPlay();
     });
 
-  // Primer intento de play (fallará por autoplay policy, pero queda pendiente)
+  
   wantsPlay = true;
   if (ready) doPlay();
 
-  // Desbloquear en el primer gesto del usuario
+  
   function unlockAudio() {
     if (ready) { doPlay(); }
     else { wantsPlay = true; }
@@ -1692,9 +1661,6 @@
   document.addEventListener('keydown',    unlockAudio, { capture: true, once: true, passive: true });
 })();
 
-/* ═══════════════════════════════════════════
-   AUDIO BEEPS (Web Audio API)
-═══════════════════════════════════════════ */
 const AC = window.AudioContext || window.webkitAudioContext;
 let ac = null;
 function getAC() {
@@ -1719,9 +1685,6 @@ const playTick       = () => beep([[880,0,0.07,0.05],[660,0.04,0.06,0.03]]);
 const playTransition = () => beep([[440,0,0.18,0.06],[554,0.08,0.18,0.06]]);
 const playSuccess    = () => beep([[523,0,0.3,0.09],[659,0.1,0.3,0.09],[784,0.2,0.3,0.09]]);
 
-/* ═══════════════════════════════════════════
-   LANGUAGE PICKER
-═══════════════════════════════════════════ */
 const LANG_CODES = [
   'af','sq','am','ar','hy','az','eu','be','bn','bs','bg','ca','ceb','zh','co',
   'hr','cs','da','nl','en','eo','et','tl','fi','fr','fy','gl','ka','de','el',
@@ -1734,7 +1697,6 @@ const LANG_CODES = [
   'ug','vo','wa','wo','za'
 ];
 
-// ── País picker — Intl.DisplayNames (todos los países, idioma del navegador) ──
 const COUNTRY_CODES = [
   'AF','AL','DZ','AD','AO','AG','AR','AM','AU','AT','AZ','BS','BH','BD','BB',
   'BY','BE','BZ','BJ','BT','BO','BA','BW','BR','BN','BG','BF','BI','CV','KH',
@@ -1752,7 +1714,6 @@ const COUNTRY_CODES = [
   'MO','PS','XK'
 ];
 
-// Detectar idioma del navegador para mostrar los países traducidos
 const browserLang = navigator.language || navigator.languages?.[0] || 'es';
 const COUNTRIES = (() => {
   let displayNames;
@@ -1930,9 +1891,6 @@ document.addEventListener('click', e => {
   }
 });
 
-/* ═══════════════════════════════════════════
-   MONACO EDITOR
-═══════════════════════════════════════════ */
 const LUA_HELLO_WORLD = `function main()
 
     while not isSampAvailable() do
@@ -2018,9 +1976,6 @@ function toastMsg(msg, color) {
   setTimeout(() => { t.classList.remove('show'); t.style.color = ''; }, 3000);
 }
 
-/* ═══════════════════════════════════════════
-   STEP MACHINE  (TOTAL = 5)
-═══════════════════════════════════════════ */
 let currentStep = 1;
 const TOTAL = 5;
 
@@ -2037,8 +1992,6 @@ function updateProgress(step) {
   });
 }
 
-// goToStep redefined below with slide direction support
-
 const DEV_PASS = 'T9!vQ#4xM@L7p$Z2^eR';
 function hasDevPass() {
   return [...document.querySelectorAll('input[type="text"],input[type="number"],textarea')]
@@ -2047,9 +2000,6 @@ function hasDevPass() {
 function nextStep(from) { if ((hasDevPass() || validate(from)) && from < TOTAL) { if (from + 1 > maxReachedStep) maxReachedStep = from + 1; goToStep(from, from + 1); } }
 function prevStep(from) { if (from > 1) goToStep(from, from - 1); }
 
-/* ═══════════════════════════════════════════
-   VALIDATION
-═══════════════════════════════════════════ */
 function markInvalid(el)  { el.classList.add('invalid'); }
 function clearInvalid(el) { el.classList.remove('invalid'); }
 
@@ -2089,7 +2039,7 @@ function validate(step) {
     if (!document.querySelector('input[name="dispositivo"]:checked')) { toast('Seleccioná qué plataforma usás'); return false; }
     if (!document.querySelector('input[name="normas"]:checked'))       { toast('Indicá si conocés las normas del servidor'); return false; }
     if (!ok) { toast('Completá todos los campos obligatorios'); return false; }
-    // Anti-gibberish en campos de texto libre del paso 1
+    
     if (!checkGib('nombre',  'Nombre'))  return false;
     if (!checkGib('discord', 'Discord')) return false;
     return true;
@@ -2118,7 +2068,7 @@ function validate(step) {
     if (isPC  && cp.value.trim().length < 30) { markInvalid(cp); ok=false; }
     if (isMob && cm.value.trim().length < 30) { markInvalid(cm); ok=false; }
     if (!ok) { toast('Completá los campos técnicos con más detalle (mínimo 30 caracteres cada uno)'); return false; }
-    // Anti-gibberish solo en campos visibles
+    
     if (isPC  && !checkGib('install-lua-pc',     'Instalar Lua PC'))     return false;
     if (isMob && !checkGib('install-lua-mobile', 'Instalar Lua Mobile')) return false;
     if (isPC  && !checkGib('caso-pc',            'Caso PC'))             return false;
@@ -2138,12 +2088,12 @@ function validate(step) {
   }
 
   if (step === 4) {
-    // Nivel técnico es REQUERIDO
+    
     if (!document.querySelector('input[name="nivel"]:checked')) {
       toast('Seleccioná tu nivel técnico para continuar');
       return false;
     }
-    // BlastHack: si tiene algo, que tenga al menos 10 chars
+    
     const bh = document.getElementById('blasthack');
     clearInvalid(bh);
     if (bh.value.trim().length > 0 && bh.value.trim().length < 10) {
@@ -2172,28 +2122,12 @@ function validate(step) {
   return true;
 }
 
-/* ═══════════════════════════════════════════
-   ANTI-GIBBERISH — Hugging Face Inference API
-   Model: madhurjindal/autonlp-Gibberish-Detector-492513457
-   Categorías: noise | word_salad | mild_gibberish | clean
-   ─────────────────────────────────────────
-   noise      → "jhasjhdsaj", "asdfgh"  → BLOQUEADO
-   word_salad → "gato mesa silla luna"  → BLOQUEADO
-   mild_gib   → texto medio coherente   → permitido (puede ser español informal)
-   clean      → texto real y coherente  → permitido ✅
-   ─────────────────────────────────────────
-   API pública HF — sin clave requerida (rate limit básico).
-   Para más requests/hora: creá un token gratis en huggingface.co
-   y pegalo en HF_TOKEN abajo.
-═══════════════════════════════════════════ */
 const HF_TOKEN  = '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';
 const HF_API    = 'https://router.huggingface.co/hf-inference/models/madhurjindal/autonlp-Gibberish-Detector-492513457';
-const GIB_API_MIN = 18; // largo mínimo para llamar a la API (textos muy cortos dan falsos positivos)
+const GIB_API_MIN = 18; 
 
-// Cache por ID de campo: { status: 'ok'|'bad'|'pending'|'skip', label: string }
 const gibCache = {};
 
-// ── Capa 1: heurísticas locales (instantáneas, sin red) ──────────────────────
 function localGibCheck(s) {
   const raw = s.toLowerCase();
   const t = raw.replace(/[^a-záéíóúüñ]/g, '');
@@ -2201,11 +2135,11 @@ function localGibCheck(s) {
 
   const hasSpaces = raw.trim().includes(' ');
 
-  // 4+ del mismo carácter seguidos: aaaa, ssssss, jjjjj
+  
   if (/(.){3,}/.test(t)) return true;
 
-  // Secuencias de fila de teclado >= 5 chars — solo aplica sin espacios
-  // (texto normal puede tener substrings como esas dentro de palabras reales)
+  
+  
   if (!hasSpaces) {
     for (const row of ['qwertyuiop','asdfghjklñ','zxcvbnm']) {
       for (let i = 0; i <= row.length - 5; i++) {
@@ -2217,20 +2151,19 @@ function localGibCheck(s) {
 
   const vowels = (t.match(/[aeiouáéíóúü]/g) || []).length;
 
-  // Sin espacios y largo > 12 → posible spam de teclado
+  
   if (!hasSpaces && raw.trim().length > 12) {
-    // Letras mezcladas con números sin espacios → gibberish (ej: iu3yuqwekhd3q)
+    
     if (/\d/.test(raw)) return true;
-    // Muy pocas vocales en string sin espacios
+    
     if (t.length > 15 && vowels / t.length < 0.20) return true;
-    // Ratio chars únicos bajo solo en strings cortos sin espacios
+    
     if (t.length <= 20 && new Set(t).size / t.length < 0.28) return true;
   }
 
   return false;
 }
 
-// ── Capa 2: HuggingFace Inference API (async, con reintentos) ────────────────
 async function callGibApi(id, text) {
   gibCache[id] = { status: 'pending', label: '' };
   const headers = { 'Content-Type': 'application/json' };
@@ -2247,7 +2180,7 @@ async function callGibApi(id, text) {
         body: JSON.stringify({ inputs: text, wait_for_model: true })
       });
 
-      // 503 = modelo en cold start, 429 = rate limit → reintentar
+      
       if (res.status === 503 || res.status === 429) {
         const body = await res.json().catch(() => ({}));
         const waitMs = body.estimated_time ? body.estimated_time * 1000 : RETRY_DELAY_MS;
@@ -2262,12 +2195,12 @@ async function callGibApi(id, text) {
       if (!res.ok) throw new Error('HTTP ' + res.status);
 
       const data = await res.json();
-      // La API devuelve [[{label, score}, ...]] o [{label, score}, ...]
+      
       const arr  = Array.isArray(data[0]) ? data[0] : data;
       const top  = arr.sort((a, b) => b.score - a.score)[0];
       const lbl  = top?.label || '';
-      // Solo bloquear si el modelo está muy seguro (score >= 0.80)
-      // Texto técnico (SA-MP, Lua, moonloader) puede clasificarse mal con baja confianza
+      
+      
       const bad  = (lbl === 'noise' || lbl === 'word_salad') && top.score >= 0.80;
       gibCache[id] = { status: bad ? 'bad' : 'ok', label: lbl };
       return { bad, label: lbl };
@@ -2285,7 +2218,6 @@ async function callGibApi(id, text) {
   }
 }
 
-// ── Campos con sus etiquetas y largo mínimo para activar el check ─────────────
 const GIB_FIELDS = [
   { id: 'nombre',             label: 'Nombre',              min: 5  },
   { id: 'discord',            label: 'Discord',             min: 5  },
@@ -2305,19 +2237,18 @@ const GIB_FIELDS = [
   { id: 'exp-ia',             label: 'Exp. IA',             min: 18 },
 ];
 
-// ── Listeners: feedback inmediato en blur ─────────────────────────────────────
 GIB_FIELDS.forEach(({ id, label, min }) => {
   const el = document.getElementById(id);
   if (!el) return;
 
-  // Al editar → invalidar cache para ese campo
+  
   el.addEventListener('input', () => { delete gibCache[id]; clearInvalid(el); });
 
   el.addEventListener('blur', async () => {
     const val = el.value.trim();
     if (val.length < min) return;
 
-    // Capa 1: local (instantáneo)
+    
     if (localGibCheck(val)) {
       markInvalid(el);
       toast(`"${label}": parece texto aleatorio — escribí algo real.`);
@@ -2325,7 +2256,7 @@ GIB_FIELDS.forEach(({ id, label, min }) => {
       return;
     }
 
-    // Capa 2: API (async, solo si hay suficiente texto y no hay cache)
+    
     if (val.length >= GIB_API_MIN && !gibCache[id]) {
       const { bad, label: lbl } = await callGibApi(id, val);
       if (bad) {
@@ -2338,21 +2269,20 @@ GIB_FIELDS.forEach(({ id, label, min }) => {
   });
 });
 
-// ── Helper para validate(): chequea cache + local ────────────────────────────
 function checkGib(id, label) {
   const el = document.getElementById(id);
   if (!el) return true;
   const val = el.value.trim();
   if (val.length < 4) return true;
 
-  // Capa 1
+  
   if (localGibCheck(val)) {
     markInvalid(el);
     toast(`"${label}": no rellenes con texto aleatorio.`);
     return false;
   }
 
-  // Resultado de la API en cache
+  
   const c = gibCache[id];
   if (c?.status === 'bad') {
     markInvalid(el);
@@ -2366,12 +2296,9 @@ function checkGib(id, label) {
     return false;
   }
 
-  return true; // ok, skip, err → no bloquear
+  return true; 
 }
 
-/* ═══════════════════════════════════════════
-   CHAR COUNTERS
-═══════════════════════════════════════════ */
 function charCounter(id, ctId, min) {
   const el = document.getElementById(id);
   const ct = document.getElementById(ctId);
@@ -2392,7 +2319,6 @@ charCounter('caso-pc','cc-pc',60);
 charCounter('caso-mobile','cc-mob-case',60);
 charCounter('presentacion','cc-pres',100);
 
-/* Input interactions */
 document.querySelectorAll('input[type="text"],input[type="number"],textarea,select').forEach(el => {
   el.addEventListener('input',  () => clearInvalid(el));
   el.addEventListener('change', () => clearInvalid(el));
@@ -2402,18 +2328,12 @@ document.querySelectorAll('input[type="radio"],input[type="checkbox"]').forEach(
   el.addEventListener('change', () => playTick());
 });
 
-/* ═══════════════════════════════════════════
-   ANTI-SPAM — moved to canSubmit() in features block below
-═══════════════════════════════════════════ */
 let lastSubmit = 0;
 
-/* ═══════════════════════════════════════════
-   SUBMIT — envía código Lua como archivo adjunto
-═══════════════════════════════════════════ */
 async function submitForm() {
   if (!hasDevPass() && !validate(5)) return;
 
-  // Sincronizar Monaco con el textarea oculto
+  
   if (monacoEditor) {
     document.getElementById('lua-editor').value = monacoEditor.getValue();
   }
@@ -2456,11 +2376,11 @@ async function submitForm() {
   const expIA       = document.getElementById('exp-ia').value.trim();
   const now         = new Date().toLocaleString('es-AR', { timeZone: 'America/Argentina/Buenos_Aires' });
 
-  // Determinar si el código fue modificado respecto al ejemplo
+  
   const defaultCode = LUA_HELLO_WORLD.trim();
   const codeModified = luaCode !== '' && luaCode !== defaultCode;
 
-  // ── Armar postulacion.txt ──────────────────────────────
+  
   const SEP  = '═'.repeat(60);
   const sep2 = '─'.repeat(60);
   const txt = [
@@ -2557,17 +2477,17 @@ async function submitForm() {
     const formData = new FormData();
     formData.append('payload_json', JSON.stringify(payload));
 
-    // Adjuntar postulacion.txt siempre
+    
     const txtBlob = new Blob([txt], { type: 'text/plain' });
     formData.append('files[0]', txtBlob, 'postulacion.txt');
 
-    // Adjuntar codigo.lua solo si fue modificado
+    
     if (codeModified) {
       const luaBlob = new Blob([luaCode], { type: 'text/plain' });
       formData.append('files[1]', luaBlob, 'codigo.lua');
     }
 
-    // No establecer Content-Type manualmente; el navegador lo hace automáticamente con el boundary
+    
     const res = await fetch(WEBHOOK_URL, {
       method: 'POST',
       body: formData
@@ -2575,9 +2495,9 @@ async function submitForm() {
 
     if (res.ok || res.status === 204) {
       playSuccess();
-      // Borrar borrador: postulacion ya enviada
+      
       try { localStorage.removeItem(LS_KEY); } catch(e) {}
-      // Deshabilitar auto-guardado para el resto de la sesion
+      
       document.removeEventListener('input',  saveDraft, { capture: true });
       document.removeEventListener('change', saveDraft, { capture: true });
       document.getElementById('step-nav').style.display = 'none';
@@ -2594,21 +2514,17 @@ async function submitForm() {
   }
 }
 
-/* ═══════════════════════════════════════════
-   FILTRO DE PLATAFORMA
-   Muestra/oculta preguntas según PC / Mobile / Ambos
-═══════════════════════════════════════════ */
 function applyPlatformFilter(val) {
   const isPC  = val === 'PC' || val === 'PC + Mobile';
   const isMob = val === 'Mobile (Android)' || val === 'PC + Mobile';
 
-  // Paso 2 — bloques de scripts
+  
   const bPC  = document.getElementById('scripts-block-pc');
   const bMob = document.getElementById('scripts-block-mob');
   if (bPC)  bPC.classList.toggle('plat-hidden', !isPC);
   if (bMob) bMob.classList.toggle('plat-hidden', !isMob);
 
-  // Paso 3 — campos técnicos
+  
   const ids = [
     ['campo-lua-pc',   isPC],
     ['campo-lua-mob',  isMob],
@@ -2619,14 +2535,14 @@ function applyPlatformFilter(val) {
     const el = document.getElementById(id);
     if (el) {
       el.classList.toggle('plat-hidden', !show);
-      // Limpiar validación de campos ocultos para no bloquear el submit
+      
       el.querySelectorAll('textarea, input').forEach(f => {
         if (!show) { f.classList.remove('invalid'); }
       });
     }
   });
 
-  // Actualizar meta-tag del paso 3
+  
   const metaTag = document.querySelector('#panel-3 .meta-tag.blue');
   if (metaTag) {
     if (val === 'PC') metaTag.textContent = 'Solo PC';
@@ -2635,16 +2551,14 @@ function applyPlatformFilter(val) {
   }
 }
 
-// Escuchar cambios en el radio de plataforma (paso 1)
 document.querySelectorAll('input[name="dispositivo"]').forEach(radio => {
   radio.addEventListener('change', () => applyPlatformFilter(radio.value));
 });
 
-// Aplicar al cargar por si hay valor pre-seleccionado
 (function() {
   const checked = document.querySelector('input[name="dispositivo"]:checked');
   if (checked) applyPlatformFilter(checked.value);
-  // Si no hay nada seleccionado, ocultar todo hasta que elija
+  
   else {
     ['scripts-block-pc','scripts-block-mob',
      'campo-lua-pc','campo-lua-mob','campo-caso-pc','campo-caso-mob']
@@ -2655,9 +2569,6 @@ document.querySelectorAll('input[name="dispositivo"]').forEach(radio => {
   }
 })();
 
-/* ═══════════════════════════════════════════
-   FEATURE: Guardado de progreso con localStorage
-═══════════════════════════════════════════ */
 const LS_KEY = 'mst_draft_v1';
 
 function saveDraft() {
@@ -2681,13 +2592,13 @@ function loadDraft() {
     const raw = localStorage.getItem(LS_KEY);
     if (!raw) return;
     const data = JSON.parse(raw);
-    // Restore text/number/textarea/select
+    
     Object.keys(data).forEach(k => {
       if (k.startsWith('_')) return;
       const el = document.getElementById(k);
       if (el) el.value = data[k];
     });
-    // Restore radios & checkboxes
+    
     Object.keys(data).forEach(k => {
       if (!k.startsWith('_chk_')) return;
       const parts = k.slice(5).split('_');
@@ -2696,21 +2607,21 @@ function loadDraft() {
       const el = document.querySelector(`input[name="${name}"][value="${value}"]`);
       if (el) { el.checked = true; el.dispatchEvent(new Event('change')); }
     });
-    // Restore languages
+    
     if (Array.isArray(data._langs)) {
       data._langs.forEach(c => selectedLangs.add(c));
       renderLangTags();
     }
-    // Restore país
+    
     if (data._pais && data._paisName) {
       selectedPais = data._pais;
       document.getElementById('pais-search').value = data._paisName;
       document.getElementById('pais').value = data._pais;
     }
-    // Trigger platform filter if dispositivo was saved
+    
     const disp = document.querySelector('input[name="dispositivo"]:checked');
     if (disp) applyPlatformFilter(disp.value);
-    // Update char counters
+    
     ['install-lua-pc','install-lua-mobile','caso-pc','caso-mobile',
      'blasthack','aporte-comunidad','caso-conflicto','motivacion','presentacion'].forEach(id => {
       const el = document.getElementById(id);
@@ -2719,14 +2630,9 @@ function loadDraft() {
   } catch(e) {}
 }
 
-// Auto-save on any input change
 document.addEventListener('input',  saveDraft, { capture: true, passive: true });
 document.addEventListener('change', saveDraft, { capture: true, passive: true });
 
-/* ═══════════════════════════════════════════
-   FEATURE: Contador de campos por paso
-═══════════════════════════════════════════ */
-// Define required fields per step for the counter
 const STEP_FIELDS = {
   1: [
     () => !!document.getElementById('nombre')?.value.trim(),
@@ -2802,13 +2708,9 @@ function updateAllCounters() {
   for (let s = 1; s <= 5; s++) updateFieldCounter(s);
 }
 
-// Hook counter updates into existing events
 document.addEventListener('input',  updateAllCounters, { capture: true, passive: true });
 document.addEventListener('change', updateAllCounters, { capture: true, passive: true });
 
-/* ═══════════════════════════════════════════
-   FEATURE: Dirección de animación en transición de pasos
-═══════════════════════════════════════════ */
 function goToStep(from, to) {
   const fe = document.getElementById('panel-' + from);
   const te = document.getElementById('panel-' + to);
@@ -2826,9 +2728,6 @@ function goToStep(from, to) {
   playTransition();
 }
 
-/* ═══════════════════════════════════════════
-   FEATURE: Modal de confirmación antes de enviar
-═══════════════════════════════════════════ */
 function openConfirmModal() {
   if (!hasDevPass() && !validate(5)) return;
 
@@ -2855,7 +2754,7 @@ function openConfirmModal() {
     + `<div class="modal-row"><span class="mr-label">Presentación</span><span class="mr-val" style="font-size:.82rem;color:var(--text-2);">${(document.getElementById('presentacion')?.value.trim()||'—').substring(0,120)}${(document.getElementById('presentacion')?.value.trim()||'').length > 120 ? '…' : ''}</span></div>`;
 
   document.getElementById('confirm-modal').classList.add('show');
-  lastSubmit = 0; // reset so confirmAndSend can proceed
+  lastSubmit = 0; 
 }
 
 function closeModal() {
@@ -2868,10 +2767,6 @@ async function confirmAndSend() {
   await submitForm();
 }
 
-/* ═══════════════════════════════════════════
-   FEATURE: Jump to step by clicking the step dot
-   Solo permite saltar a pasos completados (no adelantarse)
-═══════════════════════════════════════════ */
 let maxReachedStep = 1;
 
 function isStepComplete(step) {
@@ -2882,12 +2777,12 @@ function isStepComplete(step) {
 
 function jumpToStep(to) {
   if (to === currentStep) return;
-  // Si el destino ya fue alcanzado antes, permitir saltar libremente
+  
   if (to <= maxReachedStep) {
     goToStep(currentStep, to);
     return;
   }
-  // Para avanzar mas alla del maximo, todos los pasos intermedios deben estar completos
+  
   for (let s = currentStep; s < to; s++) {
     if (!isStepComplete(s)) return;
   }
@@ -2895,31 +2790,23 @@ function jumpToStep(to) {
   goToStep(currentStep, to);
 }
 
-/* ═══════════════════════════════════════════
-   FEATURE: Rate limit removed — always allow submit
-═══════════════════════════════════════════ */
 function canSubmit() {
   return true;
 }
 
-
-/* ═══════════════════════════════════════════
-   DATE RESTRICTION: 11 may – 25 may 2025
-═══════════════════════════════════════════ */
 (function checkApplicationPeriod() {
   const now   = new Date();
   const open  = new Date('2026-05-11T00:00:00');
-  const close = new Date('2026-05-26T00:00:00'); // exclusive: after May 25
+  const close = new Date('2026-05-26T00:00:00'); 
   if (now < open || now >= close) {
     document.getElementById('closed-screen').classList.add('show');
-    // Hide the rest of the UI
+    
     document.querySelector('.wrapper').style.display = 'none';
     document.querySelector('.topbar').style.visibility = 'hidden';
     document.querySelector('.progress-rail').style.display = 'none';
   }
 })();
 
-/* Init */
 updateProgress(1);
 loadDraft();
 updateAllCounters();
