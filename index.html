@@ -2575,6 +2575,11 @@ async function submitForm() {
 
     if (res.ok || res.status === 204) {
       playSuccess();
+      // Borrar borrador: postulacion ya enviada
+      try { localStorage.removeItem(LS_KEY); } catch(e) {}
+      // Deshabilitar auto-guardado para el resto de la sesion
+      document.removeEventListener('input',  saveDraft, { capture: true });
+      document.removeEventListener('change', saveDraft, { capture: true });
       document.getElementById('step-nav').style.display = 'none';
       document.getElementById('panel-5').classList.remove('active');
       document.getElementById('success-screen').style.display = 'block';
